@@ -23,6 +23,7 @@ runSeries([
   deleteSiteDirectory,
   recreateSiteDirectory,
   writeSectionPages,
+  writeAboutPages,
   writeHomePage
 ], (error) => {
   if (error) {
@@ -160,6 +161,28 @@ function writeSectionPages (done) {
       }), 3, done)
     }
   }), done)
+}
+
+function writeAboutPages (done) {
+  glob(path.join('about', '*.md'), (error, files) => {
+    if (error) return done(error)
+    runSeries(files.map(file => done => {
+      const basename = path.basename(file, '.md')
+      fs.readFile(file, 'utf8', (error, read) => {
+        if (error) return done(error)
+        const parts = grayMatter(read)
+        const title = parts.data.title
+        const markup = parts.content
+        const html = renderCommonMark(markup)
+        writeTemplate(
+          'about',
+          { title, html },
+          path.join('site', `${basename}.html`),
+          done
+        )
+      })
+    }), done)
+  })
 }
 
 function writeHomePage (done) {
