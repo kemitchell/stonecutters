@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+SITE=stonecutters.law
+[ -d node_modules ] || npm ci
+npm run build
+rsync -4 -a --delete site/ "$SITE:/var/www/$SITE/"
