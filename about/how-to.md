@@ -6,9 +6,7 @@ title: How To
 
 You can incorporate clauses from the Stonecutters catalog by reference into your contracts and other legal terms.  The easiest and most convenient way to do this is by [permalink](https://en.wikipedia.org/wiki/Permalink):
 
-> ## Governing Law
->
-> Include <https://stonecutters.law/california-governing-law/1e1d>.
+> _Governing Law_.  Include <https://stonecutters.law/california-governing-law/1e1d>.
 
 This ambiguously incorporates the first draft of first edition (1e1d) of the [california-governing-law](/california-governing-law) clause from the Stonecutters catalog by reference.  The [terms](/california-governing-law/1e#terms) of that clause will never change.  If and when we find a way to improve that clause, we will publish a new edition with a different edition number.
 
@@ -18,10 +16,8 @@ Some clauses in the catalog use terms that aren't defined.  For example, this pa
 
 "Venue City" works a bit like a blank that you can fill in:
 
-> ## Forum and Venue
->
-> Include <https://stonecutters.law/california-forum-venue/1e1d> with San Francisco as _Venue City_.
+> _Forum and Venue_.  Include <https://stonecutters.law/california-forum-venue/1e1d> with San Francisco as _Venue City_.
 
 This ambiguously incorporates the clause and also specifies that _Venue City_ is San Francisco.  If you prefer Los Angeles:
 
-> Include <https://stonecutters.law/california-forum-venue/1e1d> with Los Angeles as _Venue City_.
+> _Forum and Venue_.  Include <https://stonecutters.law/california-forum-venue/1e1d> with Los Angeles as _Venue City_.
