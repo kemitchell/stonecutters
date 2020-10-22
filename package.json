@@ -7,11 +7,13 @@
     "ejs": "^3.1.5",
     "glob": "^7.1.6",
     "gray-matter": "^4.0.2",
+    "licensee": "^8.1.0",
     "rimraf": "^3.0.2",
     "run-parallel-limit": "^1.0.5",
     "run-series": "^1.1.8"
   },
   "scripts": {
-    "build": "./build"
+    "build": "./build",
+    "licenses": "licensee --errors-only"
   }
 }
