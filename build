@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const commonformCommonmark = require('commonform-commonmark')
 const revedCompare = require('reviewers-edition-compare')
+const revedSpell = require('reviewers-edition-spell')
 const commonmark = require('commonmark')
 const ejs = require('ejs')
 const fs = require('fs')
@@ -60,6 +61,7 @@ function readSections (done) {
                 const parts = grayMatter(read)
                 record.identifier = identifier
                 record.edition = edition
+                record.editionSpelled = revedSpell(edition)
                 record.frontMatter = parts.data
                 record.markup = parts.content
                 record.parsed = commonformCommonmark.parse(record.markup)

@@ -7,7 +7,8 @@
   <body>
     <%- include('../includes/banner.html') %>
     <main role=main>
-      <h2><%= identifier %> <%= edition %></h2>
+      <h2><%= identifier %></h2>
+      <p class=edition><%= editionSpelled %></p>
       <blockquote><%- termsHTML %></blockquote>
       <%_ if (commentary) { _%><%- commentaryHTML -%><%_ } _%>
     </main>
