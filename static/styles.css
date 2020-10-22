@@ -16,8 +16,11 @@ footer[role=contentinfo] {
 }
 
 footer[role=contentinfo] {
-  text-align: right;
+  border-top: 1px solid black;
   margin-bottom: 3rem;
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+  text-align: right;
 }
 
 a[href] {
