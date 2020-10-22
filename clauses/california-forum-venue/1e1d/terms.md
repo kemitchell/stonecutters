@@ -4,7 +4,7 @@ jurisdictions: [California]
 license: Creative Commons CC0 1.0 Universal
 ---
 
-- **Agreed Courts** means any court of the State of California sitting in `City` and the United States District Court for the district encompassing it.
+- **Agreed Courts** means any court of the State of California sitting in _Venue City_ and the United States District Court for the district encompassing it.
 
 - **Lawsuit** means a legal proceeding against a party related to this agreement.
 
