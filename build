@@ -110,7 +110,7 @@ function readTemplates (done) {
       const name = path.basename(file, '.ejs')
       fs.readFile(file, 'utf8', (error, template) => {
         if (error) return done(error)
-        templates[name] = template
+        templates[name] = ejs.compile(template)
         done()
       })
     }), done)
@@ -166,7 +166,7 @@ function writeHomePage (done) {
 function writeTemplate (templateKey, data, file, done) {
   let html
   try {
-    html = ejs.render(templates[templateKey], data)
+    html = templates[templateKey](data)
   } catch (error) {
     return done(error)
   }
