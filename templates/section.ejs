@@ -9,11 +9,11 @@
     <%- include('../includes/navigation.html') %>
     <main role=main>
       <h2><%= identifier %></h2>
-      <ol>
+      <ul>
         <%_ editions.forEach(edition => { _%>
         <li><a href=<%= edition.code %>><%= edition.spelled %></a></li>
         <%_ }) _%>
-      </ol>
+      </ul>
     </main>
     <%- include('../includes/contentinfo.html') -%>
   </body>
