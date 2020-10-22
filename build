@@ -24,6 +24,7 @@ runSeries([
   readTemplates,
   deleteSiteDirectory,
   recreateSiteDirectory,
+  copyStaticFiles,
   writeSectionPages,
   writeAboutPages,
   writeHomePage
@@ -128,6 +129,16 @@ function readTemplates (done) {
         done()
       })
     }), done)
+  })
+}
+
+function copyStaticFiles (done) {
+  glob(path.join('static', '*'), (error, files) => {
+    if (error) return done(error)
+    runParallelLimit(files.map(file => done => {
+      const basename = path.basename(file)
+      fs.copyFile(file, path.join('site', basename), done)
+    }), 3, done)
   })
 }
 

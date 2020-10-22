@@ -1,0 +1,7 @@
+a[href] {
+  text-decoration: none;
+}
+
+a[href]:hover {
+  text-decoration: underline;
+}
