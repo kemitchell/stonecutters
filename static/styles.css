@@ -52,3 +52,15 @@ blockquote {
 aside {
   margin: 0.8rem 0;
 }
+
+.information {
+  vertical-align: top;
+}
+
+table td, table th {
+  padding: 0.5rem;
+}
+
+td ul, td ol, td dl {
+  margin: 0;
+}
