@@ -7,9 +7,10 @@
   </head>
   <body>
     <header role=banner>
-      <h1><%= identifier %></h1>
+      <h1>Stonecutters</h1>
     </header>
     <main role=main>
+      <h2><%= identifier %></h2>
       <ol>
         <% Object.keys(editions).forEach(edition => { %>
         <li><a href=<%= edition %>><%= edition %></a></li>
