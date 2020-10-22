@@ -60,8 +60,10 @@
         </tr>
         <%_ } _%>
       </table>
-      <h3>Comments</h3>
-      <%_ if (commentary) { _%><%- commentaryHTML -%><%_ } _%>
+      <%_ if (commentary) { _%>
+        <h3>Comments</h3>
+        <%- commentaryHTML -%>
+      <%_ } _%>
     </main>
       <%- include('../includes/contentinfo.html') -%>
   </body>
