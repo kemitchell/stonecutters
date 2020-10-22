@@ -1,0 +1,1 @@
+- Replaced the condition of US governing law with a clarification that the terms are per the federal DTSA.
