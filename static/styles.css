@@ -15,6 +15,11 @@ body > footer {
   text-align: left;
 }
 
+footer[role=contentinfo] {
+  text-align: right;
+  margin-bottom: 3rem;
+}
+
 a[href] {
   text-decoration: none;
 }
