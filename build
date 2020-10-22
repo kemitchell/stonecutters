@@ -131,30 +131,20 @@ function writeSectionPages (done) {
     }
 
     function writeIndex (done) {
-      let html
-      try {
-        html = ejs.render(templates.section, sections[identifier])
-      } catch (error) {
-        return done(error)
-      }
-      fs.writeFile(
+      writeTemplate(
+        'section',
+        sections[identifier],
         path.join('site', identifier, 'index.html'),
-        html,
         done
       )
     }
 
     function writeEditions (done) {
       runParallelLimit(editions.map(edition => done => {
-        let html
-        try {
-          html = ejs.render(templates.edition, sections[identifier].editions[edition])
-        } catch (error) {
-          return done(error)
-        }
-        fs.writeFile(
+        writeTemplate(
+          'edition',
+          sections[identifier].editions[edition],
           path.join('site', identifier, `${edition}.html`),
-          html,
           done
         )
       }), 3, done)
@@ -163,19 +153,22 @@ function writeSectionPages (done) {
 }
 
 function writeHomePage (done) {
+  writeTemplate(
+    'homepage',
+    { sections: Object.keys(sections) },
+    path.join('site', 'index.html'),
+    done
+  )
+}
+
+function writeTemplate (templateKey, data, file, done) {
   let html
   try {
-    html = ejs.render(templates.homepage, {
-      sections: Object.keys(sections)
-    })
+    html = ejs.render(templates[templateKey], data)
   } catch (error) {
     return done(error)
   }
-  fs.writeFile(
-    path.join('site', 'index.html'),
-    html,
-    done
-  )
+  fs.writeFile(file, html, done)
 }
 
 function renderCommonMark (markup) {
