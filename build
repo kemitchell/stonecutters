@@ -87,38 +87,27 @@ function readClauses (done) {
           }
 
           function readNotes (done) {
-            fs.readFile(
-              path.join(editionDirectory, 'notes.md'),
-              'utf8',
-              (error, read) => {
-                if (error) {
-                  if (error.code === 'ENOENT') {
-                    record.notes = false
-                    return done()
-                  }
-                  return done(error)
-                }
-                record.notes = read
-                record.notesHTML = renderCommonMark(read)
-                done()
-              }
-            )
+            readCommonMarkFile('notes.md', 'notes', done)
           }
 
           function readCommentary (done) {
+            readCommonMarkFile('commentary.md', 'commentary', done)
+          }
+
+          function readCommonMarkFile (basename, key, done) {
             fs.readFile(
-              path.join(editionDirectory, 'commentary.md'),
+              path.join(editionDirectory, basename),
               'utf8',
               (error, read) => {
                 if (error) {
                   if (error.code === 'ENOENT') {
-                    record.commentary = false
+                    record[key] = false
                     return done()
                   }
                   return done(error)
                 }
-                record.commentary = read
-                record.commentaryHTML = renderCommonMark(read)
+                record[key] = read
+                record[`${key}HTML`] = renderCommonMark(read)
                 done()
               }
             )
