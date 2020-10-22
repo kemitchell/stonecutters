@@ -6,13 +6,13 @@
     <title><%= identifier %></title>
   </head>
   <body>
-    <%- include('../includes/banner.html') %>
+    <%- include('../includes/banner.html') -%>
     <main role=main>
       <h2><%= identifier %></h2>
       <ol>
-        <% Object.keys(editions).forEach(edition => { %>
+        <%_ Object.keys(editions).forEach(edition => { _%>
         <li><a href=<%= edition %>><%= edition %></a></li>
-        <% }) %>
+        <%_ }) _%>
       </ol>
     </main>
     <%- include('../includes/contentinfo.html') -%>

@@ -6,12 +6,12 @@
     <title>Stonecutters</title>
   </head>
   <body>
-    <%- include('../includes/banner.html') %>
+    <%- include('../includes/banner.html') -%>
     <main role=main>
       <ul>
-        <% sections.forEach(identifier => { %>
+        <%_ sections.forEach(identifier => { _%>
         <li><a href=<%= identifier %>><%= identifier %></a></li>
-        <% }) %>
+        <%_ }) _%>
       </ul>
     </main>
     <%- include('../includes/contentinfo.html') -%>
