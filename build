@@ -110,7 +110,9 @@ function readTemplates (done) {
       const name = path.basename(file, '.ejs')
       fs.readFile(file, 'utf8', (error, template) => {
         if (error) return done(error)
-        templates[name] = ejs.compile(template)
+        templates[name] = ejs.compile(template, {
+          filename: file
+        })
         done()
       })
     }), done)
