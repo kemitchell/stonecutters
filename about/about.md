@@ -8,6 +8,6 @@ We value:
 - short sentences
 - everyday American English
 - supporting sources
-- feedback lawyers and clients
+- feedback from lawyers and clients
 - doing one small job very well
 - starting from scratch
