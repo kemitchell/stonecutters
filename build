@@ -20,7 +20,6 @@ const templates = {}
 
 runSeries([
   readClauses,
-  summarizeData,
   readTemplates,
   deleteSiteDirectory,
   recreateSiteDirectory,
@@ -108,11 +107,6 @@ function readClauses (done) {
       })
     }), done)
   })
-}
-
-function summarizeData (done) {
-  console.log(`Clauses: ${Object.keys(clauses).length}`)
-  done()
 }
 
 function deleteSiteDirectory (done) {
