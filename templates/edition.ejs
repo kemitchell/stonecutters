@@ -29,6 +29,18 @@
           <th><a href=https://en.wikipedia.org/wiki/Permalink target=_blank>Permalink</a></th>
           <td><a href=<%= permalink %>><%= permalink %></a></td>
         </tr>
+        <%_ if (notDefined.length !== 0) { _%>
+        <tr>
+          <th>Undefined Terms</th>
+          <td>
+            <ul>
+              <%_ notDefined.forEach(term => { _%>
+              <li><%= term %></li>
+              <%_ }) _%>
+            </ul>
+          </td>
+        </tr>
+        <%_ } _%>
         <%_ if (frontMatter.description) { _%>
         <tr>
           <th>Description</th>

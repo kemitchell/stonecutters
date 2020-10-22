@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const analyze = require('commonform-analyze')
 const commonformCommonmark = require('commonform-commonmark')
 const revedCompare = require('reviewers-edition-compare')
 const revedSpell = require('reviewers-edition-spell')
@@ -81,6 +82,10 @@ function readClauses (done) {
                 record.parsed = commonformCommonmark.parse(record.markup)
                 record.digest = hash(record.parsed.form)
                 record.termsHTML = renderCommonMark(record.markup)
+                const analysis = analyze(record.parsed.form)
+                const used = Object.keys(analysis.uses)
+                const defined = Object.keys(analysis.definitions)
+                record.notDefined = used.filter(term => !defined.includes(term))
                 done()
               }
             )
