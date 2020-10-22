@@ -1,6 +1,7 @@
 ---
 title: California Forum and Venue Selection
 jurisdictions: [CA]
+license: Creative Commons CC0 1.0 Universal
 ---
 
 - **Agreed Courts** means any court of the State of California sitting in `City` and the United States District Court for the district encompassing it.
