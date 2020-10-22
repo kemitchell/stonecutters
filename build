@@ -254,7 +254,7 @@ function writeTemplate (templateKey, data, file, done) {
 
 function renderCommonMark (markup) {
   const reader = new commonmark.Parser()
-  const writer = new commonmark.HtmlRenderer({ safe: true })
+  const writer = new commonmark.HtmlRenderer()
   const parsed = reader.parse(markup)
   return writer.render(parsed)
 }
