@@ -1,5 +1,4 @@
 ---
-description: Defend Trade Secrets Act Notice
 ---
 
 If this agreement is governed by United States law:

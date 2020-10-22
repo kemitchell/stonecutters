@@ -1,5 +1,4 @@
 ---
-description: Work Made for Hire Unless Deemed Employment
 ---
 
 # Express Agreement to Make "Work Made for Hire"

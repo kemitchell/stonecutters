@@ -1,5 +1,4 @@
 ---
-description: California Forum and Venue Selection
 jurisdictions: [California]
 license: Creative Commons CC0 1.0 Universal
 ---

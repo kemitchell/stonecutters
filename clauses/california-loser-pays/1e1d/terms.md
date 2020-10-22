@@ -1,5 +1,4 @@
 ---
-description: California Loser Pays
 jurisdictions: [California]
 license: Creative Commons CC0 1.0 Universal
 ---
