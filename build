@@ -42,6 +42,11 @@ function readClauses (done) {
     runSeries(clauseDirectories.map(clauseDirectory => done => {
       glob(path.join(clauseDirectory, '*'), (error, editionDirectories) => {
         if (error) return done(error)
+        const editions = editionDirectories
+          .map(directory => path.basename(directory))
+          .sort((a, b) => revedCompare(b, a))
+        const latest = editions[0]
+        const onlyEdition = editions.length === 1
         runSeries(editionDirectories.map(editionDirectory => done => {
           const [_, identifier, edition] = editionDirectory.split(path.sep)
           if (!clauses[identifier]) {
@@ -67,6 +72,8 @@ function readClauses (done) {
                 const parts = grayMatter(read)
                 record.identifier = identifier
                 record.edition = edition
+                record.latest = latest
+                record.onlyEdition = onlyEdition
                 record.permalink = `${BASE_HREF}/${identifier}/${edition}`
                 record.editionSpelled = revedSpell(edition)
                 record.frontMatter = parts.data || {}
@@ -211,7 +218,17 @@ function writeAboutPages (done) {
 function writeHomePage (done) {
   writeTemplate(
     'homepage',
-    { clauses: Object.keys(clauses) },
+    {
+      clauses: Object.keys(clauses)
+        .sort()
+        .map(identifier => {
+          return {
+            identifier,
+            edition: Object.keys(clauses[identifier].editions)
+              .sort((a, b) => revedCompare(b, a))[0]
+          }
+        })
+    },
     path.join('site', 'index.html'),
     done
   )

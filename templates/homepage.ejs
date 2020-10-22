@@ -9,9 +9,10 @@
     <%- include('../includes/banner.html') -%>
     <%- include('../includes/navigation.html') %>
     <main role=main>
+      <h2>Clauses</h2>
       <ul>
-        <%_ clauses.forEach(identifier => { _%>
-        <li><a href=<%= identifier %>><%= identifier %></a></li>
+        <%_ clauses.forEach(clause => { _%>
+        <li><a href=<%= clause.identifier %>/<%= clause.edition %>><%= clause.identifier %></a></li>
         <%_ }) _%>
       </ul>
     </main>
