@@ -13,11 +13,13 @@ This ambiguously incorporates the first draft of first edition (1e1d) of the [ca
 Some clauses in the catalog use terms that aren't defined.  For example, this part of [california-forum-venue 1e1d](/california-forum-venue/1e1d) uses the term "Venue City" without defining it:
 
 > **Agreed Courts** means any court of the State of California sitting in _Venue City_ and the United States District Court for the district encompassing it.
+>
+> [...]
 
 "Venue City" works a bit like a blank that you can fill in:
 
-> _Forum and Venue_.  Include <https://stonecutters.law/california-forum-venue/1e1d> with San Francisco as _Venue City_.
+> _Forum and Venue_.  Include <https://stonecutters.law/california-forum-venue/1e1d> with San Francisco as Venue City.
 
 This ambiguously incorporates the clause and also specifies that _Venue City_ is San Francisco.  If you prefer Los Angeles:
 
-> _Forum and Venue_.  Include <https://stonecutters.law/california-forum-venue/1e1d> with Los Angeles as _Venue City_.
+> _Forum and Venue_.  Include <https://stonecutters.law/california-forum-venue/1e1d> with Los Angeles as Venue City.
