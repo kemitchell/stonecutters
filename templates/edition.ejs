@@ -8,8 +8,9 @@
     <%- include('../includes/banner.html') %>
     <main role=main>
       <h2><%= identifier %> <%= edition %></h2>
-      <blockquote><%- html %></blockquote>
+      <blockquote><%- termsHTML %></blockquote>
+      <%_ if (commentary) { _%><%- commentaryHTML -%><%_ } _%>
     </main>
-    <%- include('../includes/contentinfo.html') -%>
+      <%- include('../includes/contentinfo.html') -%>
   </body>
 </html>

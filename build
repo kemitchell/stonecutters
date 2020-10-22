@@ -64,7 +64,7 @@ function readSections (done) {
                 record.markup = parts.content
                 record.parsed = commonformCommonmark.parse(record.markup)
                 record.digest = hash(record.parsed.form)
-                record.html = renderCommonMark(record.markup)
+                record.termsHTML = renderCommonMark(record.markup)
                 done()
               }
             )
@@ -76,10 +76,14 @@ function readSections (done) {
               'utf8',
               (error, read) => {
                 if (error) {
-                  if (error.code === 'ENOENT') return done()
+                  if (error.code === 'ENOENT') {
+                    record.commentary = false
+                    return done()
+                  }
                   return done(error)
                 }
                 record.commentary = read
+                record.commentaryHTML = renderCommonMark(read)
                 done()
               }
             )
