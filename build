@@ -47,7 +47,9 @@ function readSections (done) {
               editions: {}
             }
           }
-          const record = sections[identifier].editions[edition] = {}
+          const record = sections[identifier].editions[edition] = {
+            spelled: revedSpell(edition)
+          }
           runSeries([
             readTerms,
             readCommentary
@@ -144,7 +146,14 @@ function writeSectionPages (done) {
     function writeIndex (done) {
       writeTemplate(
         'section',
-        sections[identifier],
+        {
+          identifier,
+          editions: Object.keys(sections[identifier].editions)
+            .sort((a, b) => revedCompare(b, a))
+            .map(edition => {
+              return { code: edition, spelled: revedSpell(edition) }
+            })
+        },
         path.join('site', identifier, 'index.html'),
         done
       )
