@@ -13,7 +13,7 @@ const rimraf = require('rimraf')
 const runParallelLimit = require('run-parallel-limit')
 const runSeries = require('run-series')
 
-const BASE_HREF = 'https://example.com'
+const BASE_HREF = 'https://stonecutters.law'
 
 const clauses = {}
 const templates = {}
