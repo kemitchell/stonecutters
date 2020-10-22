@@ -1,6 +1,6 @@
 ---
-title: California Governing Law
-jurisdictions: [CA]
+description: California Governing Law
+jurisdictions: [California]
 license: Creative Commons CC0 1.0 Universal
 ---
 

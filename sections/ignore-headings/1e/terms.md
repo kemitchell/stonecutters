@@ -1,5 +1,5 @@
 ---
-title: Headings
+description: Headings
 license: Creative Commons CC0 1.0 Universal
 ---
 

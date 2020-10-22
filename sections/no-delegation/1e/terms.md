@@ -1,5 +1,5 @@
 ---
-title: No Delegation
+description: No Delegation
 license: Creative Commons CC0 1.0 Universal
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: California Integration
-jurisdictions: [CA]
+description: California Integration
+jurisdictions: [California]
 license: Creative Commons CC0 1.0 Universal
 ---
 

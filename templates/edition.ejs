@@ -9,7 +9,42 @@
     <main role=main>
       <h2><%= identifier %></h2>
       <p class=edition><%= editionSpelled %></p>
+      <h3>Terms</h3>
       <blockquote><%- termsHTML %></blockquote>
+      <h3>Information</h3>
+      <table>
+        <%_ if (frontMatter.description) { _%>
+        <tr>
+          <th>Description</th>
+          <td><%= frontMatter.description %></td>
+        </tr>
+        <%_ } _%>
+        <%_ if (frontMatter.jurisdictions) { _%>
+        <tr>
+          <th>Jurisdictions</th>
+          <td>
+            <ul>
+              <%_ frontMatter.jurisdictions.forEach(jurisdiction => { _%>
+              <li><%= jurisdiction %></li>
+              <%_ }) _%>
+            </ul>
+          </td>
+        </tr>
+        <%_ } _%>
+        <%_ if (frontMatter.license) { _%>
+        <tr>
+          <th>License</th>
+          <td><%= frontMatter.license %></td>
+        </tr>
+        <%_ } _%>
+        <%_ if (frontMatter.published) { _%>
+        <tr>
+          <th>Published</th>
+          <td><%= frontMatter.published %></td>
+        </tr>
+        <%_ } _%>
+      </table>
+      <h3>Comments</h3>
       <%_ if (commentary) { _%><%- commentaryHTML -%><%_ } _%>
     </main>
       <%- include('../includes/contentinfo.html') -%>

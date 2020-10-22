@@ -1,5 +1,5 @@
 ---
-title: No Assignment
+description: No Assignment
 license: Creative Commons CC0 1.0 Universal
 ---
 

@@ -62,7 +62,7 @@ function readSections (done) {
                 record.identifier = identifier
                 record.edition = edition
                 record.editionSpelled = revedSpell(edition)
-                record.frontMatter = parts.data
+                record.frontMatter = parts.data || {}
                 record.markup = parts.content
                 record.parsed = commonformCommonmark.parse(record.markup)
                 record.digest = hash(record.parsed.form)
