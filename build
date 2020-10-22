@@ -59,6 +59,7 @@ function readClauses (done) {
           }
           runSeries([
             readTerms,
+            readNotes,
             readCommentary
           ], done)
 
@@ -80,6 +81,25 @@ function readClauses (done) {
                 record.parsed = commonformCommonmark.parse(record.markup)
                 record.digest = hash(record.parsed.form)
                 record.termsHTML = renderCommonMark(record.markup)
+                done()
+              }
+            )
+          }
+
+          function readNotes (done) {
+            fs.readFile(
+              path.join(editionDirectory, 'notes.md'),
+              'utf8',
+              (error, read) => {
+                if (error) {
+                  if (error.code === 'ENOENT') {
+                    record.notes = false
+                    return done()
+                  }
+                  return done(error)
+                }
+                record.notes = read
+                record.notesHTML = renderCommonMark(read)
                 done()
               }
             )

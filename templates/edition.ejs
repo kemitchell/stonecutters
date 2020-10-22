@@ -60,6 +60,10 @@
         </tr>
         <%_ } _%>
       </table>
+      <%_ if (notes) { _%>
+        <h3>Notes to this Edition</h3>
+        <%- notesHTML -%>
+      <%_ } _%>
       <%_ if (commentary) { _%>
         <h3>Comments</h3>
         <%- commentaryHTML -%>
