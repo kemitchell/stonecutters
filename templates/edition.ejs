@@ -62,7 +62,16 @@
         <%_ if (frontMatter.license) { _%>
         <tr>
           <th>License</th>
-          <td><%= frontMatter.license %></td>
+          <td>
+            <%_ if (frontMatter.license === "CC0-1.0") { _%>
+              <a
+                  href=https://creativecommons.org/publicdomain/zero/1.0/legalcode
+                  target=_blank
+                >Creative Commons CC0 1.0 Universal Public Domain Dedication</a>
+            <%_ } else { _%>
+              <%= frontMatter.license %>
+            <%_ } _%>
+          </td>
         </tr>
         <%_ } _%>
         <%_ if (frontMatter.published) { _%>

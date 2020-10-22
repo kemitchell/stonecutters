@@ -1,6 +1,6 @@
 ---
 jurisdictions: [California]
-license: Creative Commons CC0 1.0 Universal
+license: CC0-1.0
 ---
 
 - **Agreed Courts** means any court of the State of California sitting in _Venue City_ and the United States District Court for the district encompassing it.
