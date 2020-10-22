@@ -2,7 +2,7 @@
 title: How To
 ---
 
-### Incorporating Clauses by Reference
+<h3 id="clauses">Incorporating Clauses by Reference</h3>
 
 You can incorporate clauses from the Stonecutters catalog by reference into your contracts and other legal terms.  The easiest and most convenient way to do this is by [permalink](https://en.wikipedia.org/wiki/Permalink):
 
