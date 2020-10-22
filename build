@@ -1,0 +1,175 @@
+#!/usr/bin/env node
+const commonformCommonmark = require('commonform-commonmark')
+const commonmark = require('commonmark')
+const ejs = require('ejs')
+const fs = require('fs')
+const glob = require('glob')
+const grayMatter = require('gray-matter')
+const hash = require('commonform-hash')
+const path = require('path')
+const rimraf = require('rimraf')
+const runParallelLimit = require('run-parallel-limit')
+const runSeries = require('run-series')
+
+const sections = {}
+const templates = {}
+
+runSeries([
+  readSections,
+  summarizeData,
+  readTemplates,
+  deleteSiteDirectory,
+  recreateSiteDirectory,
+  writeSectionPages,
+  writeHomePage
+], (error) => {
+  if (error) {
+    console.error(error)
+    process.exit(1)
+  }
+  process.exit(0)
+})
+
+function readSections (done) {
+  glob(path.join('sections', '*'), (error, sectionDirectories) => {
+    if (error) return done(error)
+    runSeries(sectionDirectories.map(sectionDirectory => done => {
+      glob(path.join(sectionDirectory, '*'), (error, editionDirectories) => {
+        if (error) return done(error)
+        runSeries(editionDirectories.map(editionDirectory => done => {
+          const [_, identifier, edition] = editionDirectory.split(path.sep)
+          if (!sections[identifier]) {
+            sections[identifier] = {
+              identifier,
+              editions: {}
+            }
+          }
+          const record = sections[identifier].editions[edition] = {}
+          runSeries([
+            readTerms,
+            readCommentary
+          ], done)
+
+          function readTerms (done) {
+            fs.readFile(
+              path.join(editionDirectory, 'terms.md'),
+              'utf8',
+              (error, read) => {
+                if (error) return done(error)
+                const parts = grayMatter(read)
+                record.identifier = identifier
+                record.edition = edition
+                record.frontMatter = parts.data
+                record.markup = parts.content
+                record.parsed = commonformCommonmark.parse(record.markup)
+                record.digest = hash(record.parsed.form)
+                record.html = renderCommonMark(record.markup)
+                done()
+              }
+            )
+          }
+
+          function readCommentary (done) {
+            fs.readFile(
+              path.join(editionDirectory, 'commentary.md'),
+              'utf8',
+              (error, read) => {
+                if (error) {
+                  if (error.code === 'ENOENT') return done()
+                  return done(error)
+                }
+                record.commentary = read
+                done()
+              }
+            )
+          }
+        }), done)
+      })
+    }), done)
+  })
+}
+
+function summarizeData (done) {
+  console.log(`Sections: ${Object.keys(sections).length}`)
+  done()
+}
+
+function deleteSiteDirectory (done) {
+  rimraf('site', done)
+}
+
+function recreateSiteDirectory (done) {
+  fs.mkdir('site', done)
+}
+
+function readTemplates (done) {
+  glob(path.join('templates', '*'), (error, files) => {
+    if (error) return done(error)
+    runSeries(files.map(file => done => {
+      const name = path.basename(file, '.ejs')
+      fs.readFile(file, 'utf8', (error, template) => {
+        if (error) return done(error)
+        templates[name] = template
+        done()
+      })
+    }), done)
+  })
+}
+
+function writeSectionPages (done) {
+  const identifiers = Object.keys(sections)
+  runSeries(identifiers.map(identifier => done => {
+    const editions = Object.keys(sections[identifier].editions)
+    runSeries([
+      createDirectory,
+      writeIndex,
+      writeEditions
+    ], done)
+
+    function createDirectory (done) {
+      fs.mkdir(path.join('site', identifier), done)
+    }
+
+    function writeIndex (done) {
+      let html
+      try {
+        html = ejs.render(templates.section, sections[identifier])
+      } catch (error) {
+        return done(error)
+      }
+      fs.writeFile(
+        path.join('site', identifier, 'index.html'),
+        html,
+        done
+      )
+    }
+
+    function writeEditions (done) {
+      runParallelLimit(editions.map(edition => done => {
+        let html
+        try {
+          html = ejs.render(templates.edition, sections[identifier].editions[edition])
+        } catch (error) {
+          return done(error)
+        }
+        fs.writeFile(
+          path.join('site', identifier, `${edition}.html`),
+          html,
+          done
+        )
+      }), 3, done)
+    }
+  }), done)
+}
+
+function writeHomePage (done) {
+  // TODO
+  done()
+}
+
+function renderCommonMark (markup) {
+  const reader = new commonmark.Parser()
+  const writer = new commonmark.HtmlRenderer({ safe: true })
+  const parsed = reader.parse(markup)
+  return writer.render(parsed)
+}

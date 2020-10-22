@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "devDependencies": {
+    "commonform-commonmark": "^6.0.0",
+    "commonform-hash": "^1.0.0",
+    "commonmark": "^0.29.2",
+    "ejs": "^3.1.5",
+    "glob": "^7.1.6",
+    "gray-matter": "^4.0.2",
+    "rimraf": "^3.0.2",
+    "run-parallel-limit": "^1.0.5",
+    "run-series": "^1.1.8"
+  },
+  "scripts": {
+    "build": "build"
+  }
+}
