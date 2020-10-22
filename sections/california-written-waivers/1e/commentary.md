@@ -1,0 +1,3 @@
+> Certainly, an antiwaiver provision would militate against a finding of waiver under most circumstances.
+
+Gould v. Corinthian Colleges, Inc., 192 Cal.App.4th 1176, 1180 (Cal. Ct. App. 2011) (in dicta).
