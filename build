@@ -15,17 +15,17 @@ const runSeries = require('run-series')
 
 const BASE_HREF = 'https://example.com/'
 
-const sections = {}
+const clauses = {}
 const templates = {}
 
 runSeries([
-  readSections,
+  readClauses,
   summarizeData,
   readTemplates,
   deleteSiteDirectory,
   recreateSiteDirectory,
   copyStaticFiles,
-  writeSectionPages,
+  writeClausePages,
   writeAboutPages,
   writeHomePage
 ], (error) => {
@@ -36,21 +36,21 @@ runSeries([
   process.exit(0)
 })
 
-function readSections (done) {
-  glob(path.join('sections', '*'), (error, sectionDirectories) => {
+function readClauses (done) {
+  glob(path.join('clauses', '*'), (error, clauseDirectories) => {
     if (error) return done(error)
-    runSeries(sectionDirectories.map(sectionDirectory => done => {
-      glob(path.join(sectionDirectory, '*'), (error, editionDirectories) => {
+    runSeries(clauseDirectories.map(clauseDirectory => done => {
+      glob(path.join(clauseDirectory, '*'), (error, editionDirectories) => {
         if (error) return done(error)
         runSeries(editionDirectories.map(editionDirectory => done => {
           const [_, identifier, edition] = editionDirectory.split(path.sep)
-          if (!sections[identifier]) {
-            sections[identifier] = {
+          if (!clauses[identifier]) {
+            clauses[identifier] = {
               identifier,
               editions: {}
             }
           }
-          const record = sections[identifier].editions[edition] = {
+          const record = clauses[identifier].editions[edition] = {
             spelled: revedSpell(edition)
           }
           runSeries([
@@ -104,7 +104,7 @@ function readSections (done) {
 }
 
 function summarizeData (done) {
-  console.log(`Sections: ${Object.keys(sections).length}`)
+  console.log(`Clauses: ${Object.keys(clauses).length}`)
   done()
 }
 
@@ -142,10 +142,10 @@ function copyStaticFiles (done) {
   })
 }
 
-function writeSectionPages (done) {
-  const identifiers = Object.keys(sections)
+function writeClausePages (done) {
+  const identifiers = Object.keys(clauses)
   runSeries(identifiers.map(identifier => done => {
-    const editions = Object.keys(sections[identifier].editions)
+    const editions = Object.keys(clauses[identifier].editions)
       .sort((a, b) => revedCompare(b, a))
     runSeries([
       createDirectory,
@@ -159,10 +159,10 @@ function writeSectionPages (done) {
 
     function writeIndex (done) {
       writeTemplate(
-        'section',
+        'clause',
         {
           identifier,
-          editions: Object.keys(sections[identifier].editions)
+          editions: Object.keys(clauses[identifier].editions)
             .sort((a, b) => revedCompare(b, a))
             .map(edition => {
               return { code: edition, spelled: revedSpell(edition) }
@@ -177,7 +177,7 @@ function writeSectionPages (done) {
       runParallelLimit(editions.map(edition => done => {
         writeTemplate(
           'edition',
-          sections[identifier].editions[edition],
+          clauses[identifier].editions[edition],
           path.join('site', identifier, `${edition}.html`),
           done
         )
@@ -211,7 +211,7 @@ function writeAboutPages (done) {
 function writeHomePage (done) {
   writeTemplate(
     'homepage',
-    { sections: Object.keys(sections) },
+    { clauses: Object.keys(clauses) },
     path.join('site', 'index.html'),
     done
   )
