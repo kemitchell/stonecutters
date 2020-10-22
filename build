@@ -163,8 +163,19 @@ function writeSectionPages (done) {
 }
 
 function writeHomePage (done) {
-  // TODO
-  done()
+  let html
+  try {
+    html = ejs.render(templates.homepage, {
+      sections: Object.keys(sections)
+    })
+  } catch (error) {
+    return done(error)
+  }
+  fs.writeFile(
+    path.join('site', 'index.html'),
+    html,
+    done
+  )
 }
 
 function renderCommonMark (markup) {
