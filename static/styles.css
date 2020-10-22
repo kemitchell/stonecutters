@@ -4,10 +4,10 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-body > header,
-body > nav,
-body > main,
-body > footer {
+header[role=banner],
+nav[role=navigation],
+main[role=main],
+footer[role=contentinfo] {
   margin-left: auto;
   margin-right: auto;
   max-width: 40rem;
