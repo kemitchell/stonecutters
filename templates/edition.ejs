@@ -14,6 +14,10 @@
       <blockquote><%- termsHTML %></blockquote>
       <h3>Information</h3>
       <table>
+        <tr>
+          <th><a href=https://en.wikipedia.org/wiki/Permalink target=_blank>Permalink</a></th>
+          <td><a href=<%= permalink %>><%= permalink %></a></td>
+        </tr>
         <%_ if (frontMatter.description) { _%>
         <tr>
           <th>Description</th>
