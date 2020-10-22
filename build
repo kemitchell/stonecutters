@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const commonformCommonmark = require('commonform-commonmark')
+const revedCompare = require('reviewers-edition-compare')
 const commonmark = require('commonmark')
 const ejs = require('ejs')
 const fs = require('fs')
@@ -120,6 +121,7 @@ function writeSectionPages (done) {
   const identifiers = Object.keys(sections)
   runSeries(identifiers.map(identifier => done => {
     const editions = Object.keys(sections[identifier].editions)
+      .sort((a, b) => revedCompare(b, a))
     runSeries([
       createDirectory,
       writeIndex,
