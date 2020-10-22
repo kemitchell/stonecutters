@@ -1,4 +1,5 @@
 ---
+license: United States Federal Government Work
 ---
 
 If this agreement is governed by United States law:
