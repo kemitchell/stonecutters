@@ -6,7 +6,7 @@ a[href]:hover {
   text-decoration: underline;
 }
 
-.terms {
+blockquote {
   border: 2px dashed black;
   margin: 1rem;
   padding: 1rem;
