@@ -1,5 +1,5 @@
 ---
-title: Turnstile
+title: Turnstile Terms of Service
 description: standard website terms of service
 homepage: https://turnstiletos.com
 tags: [websites, contracts]
