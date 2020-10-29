@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang=en-US>
+  <head>
+    <%- include('../includes/meta.html') -%>
+    <title><%= identifier %></title>
+    <%- include('../includes/head.html') -%>
+  </head>
+  <body>
+    <%- include('../includes/banner.html') -%>
+    <%- include('../includes/navigation.html') %>
+    <main role=main>
+      <h2><%= title %></h2>
+      <p class=description><%= description %></p>
+      <table class=metadata id=metadata>
+        <tr>
+          <th>Homepage</th>
+          <td><a href="<%= homepage %>"><%= homepage %></a></td>
+        </tr>
+        <tr>
+          <th>Tags</th>
+          <td><ul><%_ tags.forEach(tag => { _%><li><%= tag %></li><%_ }) _%></ul></td>
+        </tr>
+      </table>
+    </main>
+    <%- include('../includes/contentinfo.html') -%>
+  </body>
+</html>

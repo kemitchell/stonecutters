@@ -17,15 +17,18 @@ const runSeries = require('run-series')
 const BASE_HREF = 'https://stonecutters.law'
 
 const clauses = {}
+const forms = {}
 const templates = {}
 
 runSeries([
   readClauses,
+  readForms,
   readTemplates,
   deleteSiteDirectory,
   recreateSiteDirectory,
   copyStaticFiles,
   writeClausePages,
+  writeFormPages,
   writeAboutPages,
   writeHomePage
 ], (error) => {
@@ -123,6 +126,37 @@ function readClauses (done) {
   })
 }
 
+function readForms (done) {
+  glob(path.join('forms', '*.md'), (error, formPaths) => {
+    if (error) return done(error)
+    runSeries(formPaths.map(formPath => done => {
+      const identifier = path.basename(formPath, '.md')
+      if (!forms[identifier]) {
+        forms[identifier] = {
+          identifier
+        }
+      }
+      fs.readFile(formPath, 'utf8', (error, read) => {
+        if (error) return done(error)
+        const { content, data } = grayMatter(read)
+        forms[identifier] = {
+          identifier,
+          homepage: data.homepage,
+          title: data.title,
+          description: data.description,
+          tags: data.tags || [],
+          content,
+          html: renderCommonMark(content)
+        }
+        done()
+      })
+    }), done)
+  }, (error) => {
+    if (error) return done(error)
+    console.error(forms)
+  })
+}
+
 function deleteSiteDirectory (done) {
   rimraf('site', done)
 }
@@ -201,6 +235,18 @@ function writeClausePages (done) {
   }), done)
 }
 
+function writeFormPages (done) {
+  const identifiers = Object.keys(forms)
+  runSeries(identifiers.map(identifier => done => {
+    writeTemplate(
+      'form',
+      forms[identifier],
+      path.join('site', `${identifier}.html`),
+      done
+    )
+  }), done)
+}
+
 function writeAboutPages (done) {
   glob(path.join('about', '*.md'), (error, files) => {
     if (error) return done(error)
@@ -227,6 +273,18 @@ function writeHomePage (done) {
   writeTemplate(
     'homepage',
     {
+      forms: Object.keys(forms)
+        .sort()
+        .map(identifier => {
+          const record = forms[identifier]
+          return {
+            identifier,
+            archived: record.archived,
+            tags: record.tags,
+            title: record.title
+          }
+        })
+        .filter(form => !form.archived),
       clauses: Object.keys(clauses)
         .sort()
         .map(identifier => {
