@@ -4,7 +4,11 @@ title: How To
 
 <h3 id="clauses">Incorporating Clauses by Reference</h3>
 
-You can incorporate clauses from the Stonecutters catalog by reference into your contracts and other legal terms.  The easiest and most convenient way to do this is by [permalink](https://en.wikipedia.org/wiki/Permalink):
+You can incorporate clauses from the Stonecutters catalog by reference into your contracts and other legal terms.  The easiest and most convenient way to do this is by including the following:
+
+"Include" when followed by a website address beginning with https://stonecutters.law/ means the specific clause found at the website address and identified as "Terms" are incorporated by reference.
+
+And then wherever you want the clause to appear, just say "Include" followed by a [permalink](https://en.wikipedia.org/wiki/Permalink). An example is as follows:
 
 > _Governing Law_.  Include <https://stonecutters.law/california-governing-law/1e1d>.
 
