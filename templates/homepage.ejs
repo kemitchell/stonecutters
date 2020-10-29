@@ -11,13 +11,13 @@
     <main role=main>
       <p>Stonecutters publishes legal forms and clauses for other legal craftsmen to <a href="/how-to">incorporate by reference</a>.</p>
       <h2>Forms</h2>
-      <ul>
+      <ul class=twoColumn>
         <%_ forms.forEach(form => { _%>
         <li><a href=<%= form.identifier %>><%= form.title %></a></li>
         <%_ }) _%>
       </ul>
       <h2>Clauses</h2>
-      <ul>
+      <ul class=twoColumn>
         <%_ clauses.forEach(clause => { _%>
         <li><a href=<%= clause.identifier %>/<%= clause.edition %>><%= clause.identifier %></a></li>
         <%_ }) _%>

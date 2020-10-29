@@ -89,3 +89,7 @@ table td, table th {
 td ul, td ol, td dl {
   margin: 0;
 }
+
+.twoColumn {
+  column-count: 2;
+}
