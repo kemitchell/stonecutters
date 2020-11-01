@@ -23,3 +23,5 @@ Some clauses in the catalog use terms that aren't defined.  For example, this pa
 This unambiguously incorporates the clause and also specifies that _Venue City_ is San Francisco.  If you prefer Los Angeles:
 
 > _Forum and Venue_.  Include <https://stonecutters.law/california-forum-venue/1e1d> with Los Angeles as Venue City.
+
+For notes and sources on incorporation by reference, see [this page](/incorporation-by-reference).
