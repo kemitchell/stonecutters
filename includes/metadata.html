@@ -39,6 +39,18 @@
   </tr>
   <%_ } _%>
   <%_ if (frontMatter.license) { _%>
+  <%_ if (subjects) { _%>
+  <tr>
+    <th>Subjects</th>
+    <td>
+      <ul>
+        <%_ subjects.forEach(subject => { _%>
+        <li><a href=/subjects/<%= subject.slug %>><%= subject.title %></a></li>
+        <%_ }) _%>
+      </ul>
+    </td>
+  </tr>
+  <%_ } _%>
   <tr>
     <th>License</th>
     <td>

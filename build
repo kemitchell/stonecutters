@@ -77,9 +77,9 @@ function readClauses (done) {
         const clauseSubjects = clauses[identifier].subjects
         clauseSubjects.forEach(subject => {
           if (subjects[subject]) {
-            subjects[subject].push(identifier)
+            subjects[subject].clauses.push(identifier)
           } else {
-            subjects[subject] = [identifier]
+            subjects[subject] = { forms: [], clauses: [identifier] }
           }
         })
         done()
@@ -118,6 +118,14 @@ function readClauses (done) {
                   if (error) return done(error)
                   const parts = grayMatter(read)
                   record.title = clauses[identifier].title
+                  record.subjects = clauses[identifier].subjects
+                    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+                    .map(subject => {
+                      return {
+                        title: subject,
+                        slug: subjectToSlug(subject)
+                      }
+                    })
                   record.identifier = identifier
                   record.edition = edition
                   record.latest = latest
@@ -193,6 +201,15 @@ function readForms (done) {
           content,
           html: renderCommonMark(content)
         }
+        // Index form.
+        const formSubjects = data.subjects || []
+        formSubjects.forEach(subject => {
+          if (subjects[subject]) {
+            subjects[subject].forms.push(identifier)
+          } else {
+            subjects[subject] = { forms: [identifier], clauses: [] }
+          }
+        })
         done()
       })
     }), done)
@@ -362,7 +379,19 @@ function writeSubjectPages (done) {
       'subject',
       {
         subject,
-        clauses: subjects[subject]
+        forms: Object.keys(forms)
+          .sort()
+          .map(identifier => {
+            const record = forms[identifier]
+            return {
+              identifier,
+              archived: record.archived,
+              subjects: record.subjects,
+              title: record.title
+            }
+          })
+          .filter(form => !form.archived),
+        clauses: subjects[subject].clauses
           .sort()
           .map(identifier => {
             return {

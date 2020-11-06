@@ -79,7 +79,7 @@ aside {
   margin: 0.8rem 0;
 }
 
-table {
+table, th, td {
   vertical-align: top;
 }
 
