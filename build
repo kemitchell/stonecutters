@@ -19,6 +19,7 @@ const BASE_HREF = 'https://stonecutters.law'
 const clauses = {}
 const forms = {}
 const templates = {}
+const tags = {}
 
 runSeries([
   readClauses,
@@ -31,6 +32,7 @@ runSeries([
   writeClausePages,
   writeFormPages,
   writeAboutPages,
+  writeTagPages,
   writeHomePage
 ], (error) => {
   if (error) {
@@ -47,6 +49,7 @@ function readClauses (done) {
       const identifier = path.basename(clauseDirectory)
       runSeries([
         readClauseMetadata,
+        indexClause,
         readEditions
       ], done)
 
@@ -60,7 +63,7 @@ function readClauses (done) {
             clauses[identifier] = {
               identifier,
               title: parts.data.title,
-              tags: parts.data.tags,
+              tags: parts.data.tags || [],
               description: parts.content,
               html: renderCommonMark(parts.content),
               editions: {}
@@ -68,6 +71,18 @@ function readClauses (done) {
             done()
           }
         )
+      }
+
+      function indexClause (done) {
+        const clauseTags = clauses[identifier].tags
+        clauseTags.forEach(tag => {
+          if (tags[tag]) {
+            tags[tag].push(identifier)
+          } else {
+            tags[tag] = [identifier]
+          }
+        })
+        done()
       }
 
       function readEditions (done) {
@@ -192,7 +207,10 @@ function deleteSiteDirectory (done) {
 }
 
 function recreateSiteDirectory (done) {
-  fs.mkdir('site', done)
+  runSeries([
+    done => fs.mkdir('site', done),
+    done => fs.mkdir(path.join('site', 'tags'), done)
+  ], done)
 }
 
 function readTemplates (done) {
@@ -338,6 +356,29 @@ function writeAboutPages (done) {
   })
 }
 
+function writeTagPages (done) {
+  runParallelLimit(Object.keys(tags).map(tag => done => {
+    writeTemplate(
+      'tag',
+      {
+        tag,
+        clauses: tags[tag]
+          .sort()
+          .map(identifier => {
+            return {
+              identifier,
+              title: clauses[identifier].title,
+              edition: Object.keys(clauses[identifier].editions)
+                .sort((a, b) => revedCompare(b, a))[0]
+            }
+          })
+      },
+      path.join('site', 'tags', `${tagToSlug(tag)}.html`),
+      done
+    )
+  }), 3, done)
+}
+
 function writeHomePage (done) {
   writeTemplate(
     'homepage',
@@ -363,7 +404,10 @@ function writeHomePage (done) {
             edition: Object.keys(clauses[identifier].editions)
               .sort((a, b) => revedCompare(b, a))[0]
           }
-        })
+        }),
+      tags: Object.keys(tags)
+        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+        .map(tag => { return { title: tag, slug: tagToSlug(tag) } })
     },
     path.join('site', 'index.html'),
     done
@@ -385,4 +429,8 @@ function renderCommonMark (markup) {
   const writer = new commonmark.HtmlRenderer()
   const parsed = reader.parse(markup)
   return writer.render(parsed)
+}
+
+function tagToSlug (tag) {
+  return tag.toLowerCase().replace(/ /g, '-')
 }
