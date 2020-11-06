@@ -60,6 +60,7 @@ function readClauses (done) {
             clauses[identifier] = {
               identifier,
               title: parts.data.title,
+              tags: parts.data.tags,
               description: parts.content,
               html: renderCommonMark(parts.content),
               editions: {}
