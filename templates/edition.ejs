@@ -2,14 +2,14 @@
 <html lang=en-US>
   <head>
     <%- include('../includes/meta.html') -%>
-    <title><%= identifier %> <%= edition %> :: Stonecutters</title>
+    <title><%= title %> <%= edition %> :: Stonecutters</title>
     <%- include('../includes/head.html') -%>
   </head>
   <body>
     <%- include('../includes/banner.html') %>
     <%- include('../includes/navigation.html') %>
     <main role=main>
-      <h2><%= identifier %></h2>
+      <h2><%= title %></h2>
       <p class=edition><%= editionSpelled %></p>
       <%_ if (edition === latest) { _%>
       <aside class=info>

@@ -43,85 +43,113 @@ function readClauses (done) {
   glob(path.join('clauses', '*'), (error, clauseDirectories) => {
     if (error) return done(error)
     runSeries(clauseDirectories.map(clauseDirectory => done => {
-      glob(path.join(clauseDirectory, '*'), (error, editionDirectories) => {
-        if (error) return done(error)
-        const editions = editionDirectories
-          .map(directory => path.basename(directory))
-          .sort((a, b) => revedCompare(b, a))
-        const latest = editions[0]
-        const onlyEdition = editions.length === 1
-        runSeries(editionDirectories.map(editionDirectory => done => {
-          const [_, identifier, edition] = editionDirectory.split(path.sep)
-          if (!clauses[identifier]) {
+      const identifier = path.basename(clauseDirectory)
+      runSeries([
+        readClauseMetadata,
+        readEditions
+      ], done)
+
+      function readClauseMetadata (done) {
+        fs.readFile(
+          path.join(clauseDirectory, 'clause.md'),
+          'utf8',
+          (error, read) => {
+            if (error) return done(error)
+            const parts = grayMatter(read)
             clauses[identifier] = {
               identifier,
+              title: parts.data.title,
+              description: parts.content,
+              html: renderCommonMark(parts.content),
               editions: {}
             }
+            done()
           }
-          const record = clauses[identifier].editions[edition] = {
-            spelled: revedSpell(edition)
-          }
-          runSeries([
-            readTerms,
-            readNotes,
-            readCommentary
-          ], done)
+        )
+      }
 
-          function readTerms (done) {
-            fs.readFile(
-              path.join(editionDirectory, 'terms.md'),
-              'utf8',
-              (error, read) => {
-                if (error) return done(error)
-                const parts = grayMatter(read)
-                record.identifier = identifier
-                record.edition = edition
-                record.latest = latest
-                record.onlyEdition = onlyEdition
-                record.permalink = `${BASE_HREF}/${identifier}/${edition}`
-                record.editionSpelled = revedSpell(edition)
-                record.frontMatter = parts.data || {}
-                record.markup = parts.content
-                record.parsed = commonformCommonmark.parse(record.markup)
-                record.digest = hash(record.parsed.form)
-                record.termsHTML = renderCommonMark(record.markup)
-                const analysis = analyze(record.parsed.form)
-                const used = Object.keys(analysis.uses)
-                const defined = Object.keys(analysis.definitions)
-                record.notDefined = used.filter(term => !defined.includes(term))
-                done()
+      function readEditions (done) {
+        glob(path.join(clauseDirectory, '*'), (error, editionDirectories) => {
+          if (error) return done(error)
+          const editions = editionDirectories
+            .filter(directory => !directory.endsWith('clause.md'))
+            .map(directory => path.basename(directory))
+            .sort((a, b) => revedCompare(b, a))
+          const latest = editions[0]
+          const onlyEdition = editions.length === 1
+          runSeries(editions.map(edition => done => {
+            if (!clauses[identifier]) {
+              clauses[identifier] = {
+                identifier,
+                editions: {}
               }
-            )
-          }
+            }
+            const record = clauses[identifier].editions[edition] = {
+              spelled: revedSpell(edition)
+            }
+            runSeries([
+              readTerms,
+              readNotes,
+              readCommentary
+            ], done)
 
-          function readNotes (done) {
-            readCommonMarkFile('notes.md', 'notes', done)
-          }
-
-          function readCommentary (done) {
-            readCommonMarkFile('commentary.md', 'commentary', done)
-          }
-
-          function readCommonMarkFile (basename, key, done) {
-            fs.readFile(
-              path.join(editionDirectory, basename),
-              'utf8',
-              (error, read) => {
-                if (error) {
-                  if (error.code === 'ENOENT') {
-                    record[key] = false
-                    return done()
-                  }
-                  return done(error)
+            function readTerms (done) {
+              fs.readFile(
+                path.join(clauseDirectory, edition, 'terms.md'),
+                'utf8',
+                (error, read) => {
+                  if (error) return done(error)
+                  const parts = grayMatter(read)
+                  record.title = clauses[identifier].title
+                  record.identifier = identifier
+                  record.edition = edition
+                  record.latest = latest
+                  record.onlyEdition = onlyEdition
+                  record.permalink = `${BASE_HREF}/${identifier}/${edition}`
+                  record.editionSpelled = revedSpell(edition)
+                  record.frontMatter = parts.data || {}
+                  record.markup = parts.content
+                  record.parsed = commonformCommonmark.parse(record.markup)
+                  record.digest = hash(record.parsed.form)
+                  record.termsHTML = renderCommonMark(record.markup)
+                  const analysis = analyze(record.parsed.form)
+                  const used = Object.keys(analysis.uses)
+                  const defined = Object.keys(analysis.definitions)
+                  record.notDefined = used.filter(term => !defined.includes(term))
+                  done()
                 }
-                record[key] = read
-                record[`${key}HTML`] = renderCommonMark(read)
-                done()
-              }
-            )
-          }
-        }), done)
-      })
+              )
+            }
+
+            function readNotes (done) {
+              readCommonMarkFile('notes.md', 'notes', done)
+            }
+
+            function readCommentary (done) {
+              readCommonMarkFile('commentary.md', 'commentary', done)
+            }
+
+            function readCommonMarkFile (basename, key, done) {
+              fs.readFile(
+                path.join(clauseDirectory, edition, basename),
+                'utf8',
+                (error, read) => {
+                  if (error) {
+                    if (error.code === 'ENOENT') {
+                      record[key] = false
+                      return done()
+                    }
+                    return done(error)
+                  }
+                  record[key] = read
+                  record[`${key}HTML`] = renderCommonMark(read)
+                  done()
+                }
+              )
+            }
+          }), done)
+        })
+      }
     }), done)
   })
 }
@@ -207,10 +235,13 @@ function writeClausePages (done) {
     }
 
     function writeIndex (done) {
+      const record = clauses[identifier]
       writeTemplate(
         'clause',
         {
           identifier,
+          title: record.title,
+          html: record.html,
           editions: Object.keys(clauses[identifier].editions)
             .sort((a, b) => revedCompare(b, a))
             .map(edition => {
@@ -290,6 +321,7 @@ function writeHomePage (done) {
         .map(identifier => {
           return {
             identifier,
+            title: clauses[identifier].title,
             edition: Object.keys(clauses[identifier].editions)
               .sort((a, b) => revedCompare(b, a))[0]
           }

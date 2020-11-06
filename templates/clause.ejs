@@ -2,19 +2,20 @@
 <html lang=en-US>
   <head>
     <%- include('../includes/meta.html') -%>
-    <title><%= identifier %> :: Stonecutters</title>
+    <title><%= title %> :: Stonecutters</title>
     <%- include('../includes/head.html') -%>
   </head>
   <body>
     <%- include('../includes/banner.html') -%>
     <%- include('../includes/navigation.html') %>
     <main role=main>
-      <h2><%= identifier %></h2>
+      <h2><%= title %></h2>
       <ul>
         <%_ editions.forEach(edition => { _%>
         <li><a href=<%= edition.code %>><%= edition.spelled %></a></li>
         <%_ }) _%>
       </ul>
+      <%- html %>
     </main>
     <%- include('../includes/contentinfo.html') -%>
   </body>

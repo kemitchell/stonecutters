@@ -1,0 +1,2 @@
+---
+title: Ignore Headings
