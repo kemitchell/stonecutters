@@ -3,7 +3,7 @@
     <th><a href=/permanence>Permalink</a></th>
     <td><a href=<%= permalink %>><%= permalink %></a></td>
   </tr>
-  <%_ if (commentary) { _%>
+  <%_ if (notes || commentary) { _%>
   <tr>
     <th>Commentary</th>
     <td><a href=<%= permalink %>-commentary>Available</a></td>
