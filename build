@@ -24,6 +24,7 @@ runSeries([
   readClauses,
   readForms,
   readTemplates,
+  checkForConflicts,
   deleteSiteDirectory,
   recreateSiteDirectory,
   copyStaticFiles,
@@ -207,6 +208,23 @@ function readTemplates (done) {
       })
     }), done)
   })
+}
+
+function checkForConflicts (done) {
+  const identifiers = Object.keys(clauses)
+  const titles = identifiers.map(identifier => clauses[identifier].title)
+  const conflicts = titles.reduce((conflicts, element, index, array) => {
+    if (array.indexOf(element) !== index && conflicts.indexOf(element) === -1) {
+      conflicts.push(element)
+    }
+    return conflicts
+  }, [])
+  if (conflicts.length !== 0) {
+    return done(new Error(
+      'conflicting clause titles: ' + conflicts.join(', ')
+    ))
+  }
+  done()
 }
 
 function copyStaticFiles (done) {
