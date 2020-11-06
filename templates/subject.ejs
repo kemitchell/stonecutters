@@ -2,14 +2,14 @@
 <html lang=en-US>
   <head>
     <%- include('../includes/meta.html') -%>
-    <title><%= tag %> Tag :: Stonecutters</title>
+    <title><%= subject %> Subject :: Stonecutters</title>
     <%- include('../includes/head.html') -%>
   </head>
   <body>
     <%- include('../includes/banner.html') -%>
     <%- include('../includes/navigation.html') %>
     <main role=main>
-      <h2><%= tag %> Tag</h2>
+      <h2><%= subject %> Subject</h2>
       <ul class=twoColumn>
         <%_ clauses.forEach(clause => { _%>
         <li><a href=<%= clause.identifier %>/<%= clause.edition %>><%= clause.title %></a></li>

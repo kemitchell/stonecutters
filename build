@@ -19,7 +19,7 @@ const BASE_HREF = 'https://stonecutters.law'
 const clauses = {}
 const forms = {}
 const templates = {}
-const tags = {}
+const subjects = {}
 
 runSeries([
   readClauses,
@@ -32,7 +32,7 @@ runSeries([
   writeClausePages,
   writeFormPages,
   writeAboutPages,
-  writeTagPages,
+  writeSubjectPages,
   writeHomePage
 ], (error) => {
   if (error) {
@@ -63,7 +63,7 @@ function readClauses (done) {
             clauses[identifier] = {
               identifier,
               title: parts.data.title,
-              tags: parts.data.tags || [],
+              subjects: parts.data.subjects || [],
               description: parts.content,
               html: renderCommonMark(parts.content),
               editions: {}
@@ -74,12 +74,12 @@ function readClauses (done) {
       }
 
       function indexClause (done) {
-        const clauseTags = clauses[identifier].tags
-        clauseTags.forEach(tag => {
-          if (tags[tag]) {
-            tags[tag].push(identifier)
+        const clauseSubjects = clauses[identifier].subjects
+        clauseSubjects.forEach(subject => {
+          if (subjects[subject]) {
+            subjects[subject].push(identifier)
           } else {
-            tags[tag] = [identifier]
+            subjects[subject] = [identifier]
           }
         })
         done()
@@ -189,7 +189,7 @@ function readForms (done) {
           homepage: data.homepage,
           title: data.title,
           description: data.description,
-          tags: data.tags || [],
+          subjects: data.subjects || [],
           content,
           html: renderCommonMark(content)
         }
@@ -209,7 +209,7 @@ function deleteSiteDirectory (done) {
 function recreateSiteDirectory (done) {
   runSeries([
     done => fs.mkdir('site', done),
-    done => fs.mkdir(path.join('site', 'tags'), done)
+    done => fs.mkdir(path.join('site', 'subjects'), done)
   ], done)
 }
 
@@ -356,13 +356,13 @@ function writeAboutPages (done) {
   })
 }
 
-function writeTagPages (done) {
-  runParallelLimit(Object.keys(tags).map(tag => done => {
+function writeSubjectPages (done) {
+  runParallelLimit(Object.keys(subjects).map(subject => done => {
     writeTemplate(
-      'tag',
+      'subject',
       {
-        tag,
-        clauses: tags[tag]
+        subject,
+        clauses: subjects[subject]
           .sort()
           .map(identifier => {
             return {
@@ -373,7 +373,7 @@ function writeTagPages (done) {
             }
           })
       },
-      path.join('site', 'tags', `${tagToSlug(tag)}.html`),
+      path.join('site', 'subjects', `${subjectToSlug(subject)}.html`),
       done
     )
   }), 3, done)
@@ -390,7 +390,7 @@ function writeHomePage (done) {
           return {
             identifier,
             archived: record.archived,
-            tags: record.tags,
+            subjects: record.subjects,
             title: record.title
           }
         })
@@ -405,9 +405,9 @@ function writeHomePage (done) {
               .sort((a, b) => revedCompare(b, a))[0]
           }
         }),
-      tags: Object.keys(tags)
+      subjects: Object.keys(subjects)
         .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-        .map(tag => { return { title: tag, slug: tagToSlug(tag) } })
+        .map(subject => { return { title: subject, slug: subjectToSlug(subject) } })
     },
     path.join('site', 'index.html'),
     done
@@ -431,6 +431,6 @@ function renderCommonMark (markup) {
   return writer.render(parsed)
 }
 
-function tagToSlug (tag) {
-  return tag.toLowerCase().replace(/ /g, '-')
+function subjectToSlug (subject) {
+  return subject.toLowerCase().replace(/ /g, '-')
 }
