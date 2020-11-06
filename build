@@ -255,12 +255,31 @@ function writeClausePages (done) {
 
     function writeEditions (done) {
       runParallelLimit(editions.map(edition => done => {
-        writeTemplate(
-          'edition',
-          clauses[identifier].editions[edition],
-          path.join('site', identifier, `${edition}.html`),
-          done
-        )
+        const record = clauses[identifier].editions[edition]
+
+        runSeries([
+          writeEdition,
+          writeCommentary
+        ], done)
+
+        function writeEdition (done) {
+          writeTemplate(
+            'edition',
+            record,
+            path.join('site', identifier, `${edition}.html`),
+            done
+          )
+        }
+
+        function writeCommentary (done) {
+          if (!record.commentary) return done()
+          writeTemplate(
+            'commentary',
+            record,
+            path.join('site', identifier, `${edition}-commentary.html`),
+            done
+          )
+        }
       }), 3, done)
     }
   }), done)

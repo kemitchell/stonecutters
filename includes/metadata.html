@@ -1,0 +1,62 @@
+<table class=metadata id=metadata>
+  <tr>
+    <th><a href=/permanence>Permalink</a></th>
+    <td><a href=<%= permalink %>><%= permalink %></a></td>
+  </tr>
+  <%_ if (commentary) { _%>
+  <tr>
+    <th>Commentary</th>
+    <td><a href=<%= permalink %>-commentary>Available</a></td>
+  </tr>
+  <%_ } _%>
+  <%_ if (notDefined.length !== 0) { _%>
+  <tr>
+    <th>Undefined Terms</th>
+    <td>
+      <ul>
+        <%_ notDefined.forEach(term => { _%>
+        <li><%= term %></li>
+        <%_ }) _%>
+      </ul>
+    </td>
+  </tr>
+  <%_ } _%>
+  <%_ if (frontMatter.jurisdictions) { _%>
+  <tr>
+    <th>Jurisdictions</th>
+    <td>
+      <ul>
+        <%_ frontMatter.jurisdictions.forEach(jurisdiction => { _%>
+        <li><%= jurisdiction %></li>
+        <%_ }) _%>
+      </ul>
+    </td>
+  </tr>
+  <%_ } else { _%>
+  <tr>
+    <th>Jurisdictions</th>
+    <td>Generic</td>
+  </tr>
+  <%_ } _%>
+  <%_ if (frontMatter.license) { _%>
+  <tr>
+    <th>License</th>
+    <td>
+      <%_ if (frontMatter.license === "CC0-1.0") { _%>
+        <a
+            href=https://creativecommons.org/publicdomain/zero/1.0/legalcode
+            target=_blank
+          >Creative Commons CC0 1.0 Universal Public Domain Dedication</a>
+      <%_ } else { _%>
+        <%= frontMatter.license %>
+      <%_ } _%>
+    </td>
+  </tr>
+  <%_ } _%>
+  <%_ if (frontMatter.published) { _%>
+  <tr>
+    <th>Published</th>
+    <td><%= frontMatter.published %></td>
+  </tr>
+  <%_ } _%>
+</table>
