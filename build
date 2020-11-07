@@ -37,7 +37,6 @@ runSeries([
   writeHomePage,
   deleteBookDirectory,
   recreateBookDirectory,
-  writeBookMetadata,
   writeBookFiles,
   compileBook
 ], (error) => {
@@ -457,17 +456,7 @@ function writeHomePage (done) {
   )
 }
 
-function writeBookMetadata (done) {
-  fs.writeFile(
-    path.join('book', 'metadata.json'),
-    JSON.stringify({
-      title: 'Stonecutters Catalog'
-    }),
-    done
-  )
-}
-
-const bookSources = []
+const bookSources = ['introduction.md']
 
 function writeBookFiles (done) {
   const identifiers = Object.keys(clauses)
@@ -510,7 +499,7 @@ function compileBook (done) {
     '-o',
     path.join('book', 'book.pdf'),
     '-f',
-    'commonmark',
+    'markdown',
     '--toc',
     '-V', 'documentclass=memoir',
     '--include-before-body=titlepage.tex',
