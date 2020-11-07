@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 const analyze = require('commonform-analyze')
 const commonformCommonmark = require('commonform-commonmark')
-const revedCompare = require('reviewers-edition-compare')
-const revedSpell = require('reviewers-edition-spell')
 const commonmark = require('commonmark')
 const ejs = require('ejs')
 const fs = require('fs')
@@ -10,9 +8,12 @@ const glob = require('glob')
 const grayMatter = require('gray-matter')
 const hash = require('commonform-hash')
 const path = require('path')
+const revedCompare = require('reviewers-edition-compare')
+const revedSpell = require('reviewers-edition-spell')
 const rimraf = require('rimraf')
 const runParallelLimit = require('run-parallel-limit')
 const runSeries = require('run-series')
+const spawn = require('child_process').spawn
 
 const BASE_HREF = 'https://stonecutters.law'
 
@@ -33,7 +34,12 @@ runSeries([
   writeFormPages,
   writeAboutPages,
   writeSubjectPages,
-  writeHomePage
+  writeHomePage,
+  deleteBookDirectory,
+  recreateBookDirectory,
+  writeBookMetadata,
+  writeBookFiles,
+  compileBook
 ], (error) => {
   if (error) {
     console.error(error)
@@ -133,7 +139,7 @@ function readClauses (done) {
                   record.permalink = `${BASE_HREF}/${identifier}/${edition}`
                   record.editionSpelled = revedSpell(edition)
                   record.frontMatter = parts.data || {}
-                  record.markup = parts.content
+                  record.markup = parts.content.trim()
                   record.parsed = commonformCommonmark.parse(record.markup)
                   record.digest = hash(record.parsed.form)
                   record.termsHTML = renderCommonMark(record.markup)
@@ -230,10 +236,18 @@ function recreateSiteDirectory (done) {
   ], done)
 }
 
+function deleteBookDirectory (done) {
+  rimraf('book', done)
+}
+
+function recreateBookDirectory (done) {
+  fs.mkdir('book', done)
+}
+
 function readTemplates (done) {
   glob(path.join('templates', '*'), (error, files) => {
     if (error) return done(error)
-    runSeries(files.map(file => done => {
+    runSeries(files.sort().map(file => done => {
       const name = path.basename(file, '.ejs')
       fs.readFile(file, 'utf8', (error, template) => {
         if (error) return done(error)
@@ -441,6 +455,78 @@ function writeHomePage (done) {
     path.join('site', 'index.html'),
     done
   )
+}
+
+function writeBookMetadata (done) {
+  fs.writeFile(
+    path.join('book', 'metadata.json'),
+    JSON.stringify({
+      title: 'Stonecutters Catalog'
+    }),
+    done
+  )
+}
+
+const bookSources = []
+
+function writeBookFiles (done) {
+  const identifiers = Object.keys(clauses)
+  runParallelLimit(identifiers.map(identifier => done => {
+    const clauseRecord = clauses[identifier]
+    const editions = Object.keys(clauseRecord.editions)
+    const chapterFile = path.join('book', `${identifier}.md`)
+    bookSources.push(chapterFile)
+    editions
+      .sort((a, b) => revedCompare(b, a))
+      .forEach(edition => {
+        bookSources.push(sectionFile(identifier, edition))
+      })
+    writeTemplate(
+      'chapter',
+      clauseRecord,
+      chapterFile,
+      error => {
+        if (error) return done(error)
+        runSeries(editions.map(edition => done => {
+          const record = clauses[identifier].editions[edition]
+          writeTemplate(
+            'entry',
+            record,
+            sectionFile(identifier, edition),
+            done
+          )
+        }), done)
+      }
+    )
+  }), 3, done)
+}
+
+function sectionFile (identifier, edition) {
+  return path.join('book', `${identifier} ${edition}.md`)
+}
+
+function compileBook (done) {
+  const pandoc = spawn('pandoc', [
+    '-o',
+    path.join('book', 'book.pdf'),
+    '-f',
+    'commonmark',
+    '--toc',
+    '-V', 'documentclass=memoir',
+    '--include-before-body=titlepage.tex',
+    '--pdf-engine=xelatex',
+    '--top-level-division=part',
+    '--metadata=title=Stonecutters Catalog'
+  ].concat(bookSources))
+  const chunks = []
+  pandoc.stderr.on('data', chunk => { chunks.push(chunk) })
+  pandoc.once('close', code => {
+    if (code !== 0) {
+      console.error(Buffer.concat(chunks).toString())
+      return done(new Error(`pandoc exited with status code ${code}`))
+    }
+    done()
+  })
 }
 
 function writeTemplate (templateKey, data, file, done) {
