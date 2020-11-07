@@ -1,5 +1,36 @@
-## <%- editionSpelled %>
+\section*{<%- editionSpelled %>}
+\addcontentsline{toc}{section}{<%- editionSpelled %>}
 
 <<%- permalink %>>
 
+\subsection*{Text}
 <%- '> ' + markup.split('\n').join('\n> ') %>
+
+\subsection*{Information}
+<% if (frontMatter.jurisdictions) { %>
+Jurisdictions: <%- frontMatter.jurisdictions.join(', ') %>
+<% } %>
+
+<% if (subjects.length !== 0) { %>
+Subjects: <%- subjects.map(s => s.title).join(', ') %>
+<% } %>
+
+License: <% if (frontMatter.license === "CC0-1.0") { %>
+  Creative Commons CC0 1.0 Universal Public Domain Dedication
+<% } else { %>
+  <%= frontMatter.license %>
+<% } %>
+
+<% if (frontMatter.published) { %>
+Published: <%- frontMatter.published %>
+<% } %>
+
+<%_ if (notes) { _%>
+\subsection*{Release Notes}
+<%- notes %>
+<%_ } _%>
+
+<%_ if (commentary) { _%>
+\subsection*{Commentary}
+<%- commentary %>
+<%_ } _%>

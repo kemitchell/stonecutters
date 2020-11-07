@@ -501,10 +501,14 @@ function compileBook (done) {
     '-f',
     'markdown',
     '--toc',
+    '--toc-depth=2',
     '-V', 'documentclass=memoir',
+    '-V', 'papersize=letter',
+    '-V', 'fontsize=12pt',
     '--include-before-body=titlepage.tex',
-    '--pdf-engine=xelatex',
-    '--top-level-division=part',
+    '--include-before-body=titlepage.tex',
+    '--top-level-division=section',
+    '--base-header-level=4',
     '--metadata=title=Stonecutters Catalog'
   ].concat(bookSources))
   const chunks = []
