@@ -501,7 +501,7 @@ function compileBook (done) {
     '--template', path.join('templates', 'book.tex'),
     '--toc',
     '--toc-depth=2',
-    '--shift-heading-level-by=4',
+    '--base-header-level=4',
     '--metadata=title=Stonecutters Catalog'
   ].concat(bookSources))
   const chunks = []

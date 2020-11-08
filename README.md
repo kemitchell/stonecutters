@@ -4,4 +4,4 @@ This repository contains all the source files for [stonecutters.law](https://sto
 
 ## Building
 
-`npm ci && npm build` builds the website in `./site`.  Once you've run `npm ci`, you can just run `npm run build` to rebuild.
+With Docker installed, run `make` in the root of the repository.
