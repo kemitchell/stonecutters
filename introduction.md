@@ -1,4 +1,5 @@
-\chapter*{Introduction}
-\addcontentsline{toc}{chapter}{Introduction}
+\chapter{Introduction}
 
 TODO
+
+\mainmatter

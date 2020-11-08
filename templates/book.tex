@@ -1,0 +1,31 @@
+\documentclass[11pt,letterpaper]{book}
+
+% Pandoc uses this command.
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{hyperref}
+\usepackage{setspace}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{0.5em}
+
+% Metadata
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+\author{$for(author)$$author$$sep$ \and $endfor$}
+\date{$date$}
+
+\begin{document}
+\frontmatter
+
+\begin{titlepage}
+  \begin{center}
+  \Huge\bfseries\makeatletter\@title\makeatother
+  \end{center}
+\end{titlepage}
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+$body$
+\end{document}
