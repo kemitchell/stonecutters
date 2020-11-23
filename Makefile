@@ -1,3 +1,13 @@
+.PHONY: build
+
+build: | node_modules
+	./build
+
+node_modules:
+	npm ci
+
+.PHONY: docker
+
 tag=stonecutters
 
 docker:
