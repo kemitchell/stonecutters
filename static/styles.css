@@ -16,6 +16,17 @@ footer[role=contentinfo] {
   text-align: left;
 }
 
+.logo {
+  margin-bottom: 0.5rem;
+  margin-top: 2rem;
+  max-width: 5rem;
+}
+
+header[role=banner] h1 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
 footer[role=contentinfo] {
   border-top: 1px solid black;
   margin-bottom: 3rem;
