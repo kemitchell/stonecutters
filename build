@@ -392,7 +392,7 @@ function writeSubjectPages (done) {
       'subject',
       {
         subject,
-        forms: Object.keys(forms)
+        forms: subjects[subject].forms
           .sort()
           .map(identifier => {
             const record = forms[identifier]
