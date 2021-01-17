@@ -538,3 +538,5 @@ function subjectToSlug (subject) {
     .replace(/ /g, '-')
     .replace(/[^A-Za-z0-9-]/g, '')
 }
+
+require('assert').equal(subjectToSlug('Test Example'), 'test-example')
