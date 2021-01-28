@@ -1,0 +1,8 @@
+---
+title: Square One
+description: free, plain English templates for hiring
+homepage: https://squareoneforms.com/
+subjects: [Contracts]
+---
+
+Square One provides free, plain English legal templates for hiring employees and independent contractors in the United States. Anyone can use Square One forms to hire someone new, for free.
