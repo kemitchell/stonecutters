@@ -1,6 +1,6 @@
 ---
-title: Square One
-description: free, plain English templates for hiring
+title: Square One Hiring Forms
+description: free, plain English templates for hiring employees and contractors in the USA
 homepage: https://squareoneforms.com/
 subjects: [Contracts]
 ---
