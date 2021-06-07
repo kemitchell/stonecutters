@@ -10,6 +10,12 @@
     <%- include('../includes/navigation.html') %>
     <main role=main>
       <p>Stonecutters publishes legal forms and clauses for other legal craftsmen to <a href="/how-to">incorporate by reference</a>.</p>
+      <h2>Subject Index</h2>
+      <ul class=twoColumn>
+        <%_ subjects.forEach(subject => { _%>
+        <li><a href=subjects/<%= subject.slug %>><%= subject.title %></a></li>
+        <%_ }) _%>
+      </ul>
       <h2>Forms</h2>
       <ul class=twoColumn>
         <%_ forms.forEach(form => { _%>
@@ -20,12 +26,6 @@
       <ul class=twoColumn>
         <%_ clauses.forEach(clause => { _%>
         <li><a href=<%= clause.identifier %>/<%= clause.edition %>><%= clause.title %></a></li>
-        <%_ }) _%>
-      </ul>
-      <h2>Subject Index</h2>
-      <ul class=twoColumn>
-        <%_ subjects.forEach(subject => { _%>
-        <li><a href=subjects/<%= subject.slug %>><%= subject.title %></a></li>
         <%_ }) _%>
       </ul>
     </main>
