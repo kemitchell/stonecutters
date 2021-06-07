@@ -1,4 +1,4 @@
 ---
 title: Defend Trade Secrets Act Notice
-subjects: [Intellectual Property, Trade Secret]
+subjects: [Intellectual Property, Trade Secret, Confidentiality, Nondisclosure]
 ---
