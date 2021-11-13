@@ -2,7 +2,7 @@
 title: About
 ---
 
-Stonecutters publishes legal clauses for other legal craftsmen to [incorporate by reference](/how-to).
+Stonecutters publishes legal clauses for drafters to [incorporate by reference](/how-to).
 
 We value:
 - short sentences
