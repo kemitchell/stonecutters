@@ -27,6 +27,11 @@ header[role=banner] h1 {
   padding-top: 0;
 }
 
+h2 {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
 nav[role=navigation] a {
   display: inline-block;
   margin: 0 0.5rem 0 0;
