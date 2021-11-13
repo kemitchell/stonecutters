@@ -2,7 +2,6 @@
 
 build: | node_modules
 	./build
-	inkscape static/logo.svg -e static/logo.png
 
 node_modules:
 	npm ci
