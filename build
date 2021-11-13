@@ -18,20 +18,17 @@ const spawn = require('child_process').spawn
 const BASE_HREF = 'https://stonecutters.law'
 
 const clauses = {}
-const forms = {}
 const templates = {}
 const subjects = {}
 
 runSeries([
   readClauses,
-  readForms,
   readTemplates,
   checkForConflicts,
   deleteSiteDirectory,
   recreateSiteDirectory,
   copyStaticFiles,
   writeClausePages,
-  writeFormPages,
   writeAboutPages,
   writeSubjectPages,
   writeHomePage,
@@ -84,7 +81,7 @@ function readClauses (done) {
           if (subjects[subject]) {
             subjects[subject].clauses.push(identifier)
           } else {
-            subjects[subject] = { forms: [], clauses: [identifier] }
+            subjects[subject] = { clauses: [identifier] }
           }
         })
         done()
@@ -181,46 +178,6 @@ function readClauses (done) {
         })
       }
     }), done)
-  })
-}
-
-function readForms (done) {
-  glob(path.join('forms', '*.md'), (error, formPaths) => {
-    if (error) return done(error)
-    runSeries(formPaths.map(formPath => done => {
-      const identifier = path.basename(formPath, '.md')
-      if (!forms[identifier]) {
-        forms[identifier] = {
-          identifier
-        }
-      }
-      fs.readFile(formPath, 'utf8', (error, read) => {
-        if (error) return done(error)
-        const { content, data } = grayMatter(read)
-        forms[identifier] = {
-          identifier,
-          homepage: data.homepage,
-          title: data.title,
-          description: data.description,
-          subjects: data.subjects || [],
-          content,
-          html: renderCommonMark(content)
-        }
-        // Index form.
-        const formSubjects = data.subjects || []
-        formSubjects.forEach(subject => {
-          if (subjects[subject]) {
-            subjects[subject].forms.push(identifier)
-          } else {
-            subjects[subject] = { forms: [identifier], clauses: [] }
-          }
-        })
-        done()
-      })
-    }), done)
-  }, (error) => {
-    if (error) return done(error)
-    console.error(forms)
   })
 }
 
@@ -352,18 +309,6 @@ function writeClausePages (done) {
   }), done)
 }
 
-function writeFormPages (done) {
-  const identifiers = Object.keys(forms)
-  runSeries(identifiers.map(identifier => done => {
-    writeTemplate(
-      'form',
-      forms[identifier],
-      path.join('site', `${identifier}.html`),
-      done
-    )
-  }), done)
-}
-
 function writeAboutPages (done) {
   glob(path.join('about', '*.md'), (error, files) => {
     if (error) return done(error)
@@ -392,18 +337,6 @@ function writeSubjectPages (done) {
       'subject',
       {
         subject,
-        forms: subjects[subject].forms
-          .sort()
-          .map(identifier => {
-            const record = forms[identifier]
-            return {
-              identifier,
-              archived: record.archived,
-              subjects: record.subjects,
-              title: record.title
-            }
-          })
-          .filter(form => !form.archived),
         clauses: subjects[subject].clauses
           .sort()
           .map(identifier => {
@@ -425,18 +358,6 @@ function writeHomePage (done) {
   writeTemplate(
     'homepage',
     {
-      forms: Object.keys(forms)
-        .sort()
-        .map(identifier => {
-          const record = forms[identifier]
-          return {
-            identifier,
-            archived: record.archived,
-            subjects: record.subjects,
-            title: record.title
-          }
-        })
-        .filter(form => !form.archived),
       clauses: Object.keys(clauses)
         .sort()
         .map(identifier => {

@@ -40,6 +40,10 @@ footer[role=contentinfo] {
   text-align: right;
 }
 
+footer[role=contentinfo] a[href] {
+  margin-left: 0.5ex;
+}
+
 a[href] {
   text-decoration: none;
 }

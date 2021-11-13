@@ -16,7 +16,7 @@ Since stonecutters.law inhabits the real world, there have to be a few exception
 
 - The formatting, styling, typography, and other user interface elements of form pages will change. The plan is that they will get better. The people behind commonform.org will do their best to avoid any confusion about what is the text of the form on that page, and what is other, potentially changeable content.
 
-- If we have to take forms down to avoid legal claims, or to comply with the law, we will. For example, we may take forms down under the Digital Millennium Copyright Act or to avoid getting roped into somebody else's trademark suit.
+- If we have to take content down to avoid legal claims, or to comply with the law, we will. For example, we may take content down under the Digital Millennium Copyright Act or to avoid getting roped into somebody else's trademark suit.
 
 Since we are but mortals, there will also be exceptions we haven’t though of yet.  We will do our best to mention them here when we do.
 

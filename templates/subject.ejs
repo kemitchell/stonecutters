@@ -10,14 +10,6 @@
     <%- include('../includes/navigation.html') %>
     <main role=main>
       <h2>Subject: <%= subject %></h2>
-      <%_ if (forms.length !== 0) { _%>
-      <h3>Forms</h3>
-      <ul class=twoColumn>
-        <%_ forms.forEach(form => { _%>
-        <li><a href=/<%= form.identifier %>><%= form.title %></a></li>
-        <%_ }) _%>
-      </ul>
-      <%_ } _%>
       <%_ if (clauses.length !== 0) { _%>
       <h3>Clauses</h3>
       <ul class=twoColumn>
