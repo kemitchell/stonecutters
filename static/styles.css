@@ -33,7 +33,7 @@ nav[role=navigation] a {
 }
 
 footer[role=contentinfo] {
-  border-top: 1px solid black;
+  font-size: 90%;
   margin-bottom: 3rem;
   margin-top: 2rem;
   padding-top: 0.5rem;
