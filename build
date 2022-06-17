@@ -336,6 +336,7 @@ function writeClauseJSON (done) {
             publisher: 'Stonecutters',
             name: record.title,
             version,
+            license: record.frontMatter.license,
             form: record.parsed.form
           }),
           done
