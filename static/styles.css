@@ -68,6 +68,13 @@ blockquote {
   padding: 0.8rem;
 }
 
+.success a[href],
+.danger a[href],
+.warning a[href],
+.info a[href] {
+  text-decoration: underline;
+}
+
 .success {
   background-color: #28a745;
 }
