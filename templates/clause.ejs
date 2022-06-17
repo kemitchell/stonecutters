@@ -12,7 +12,7 @@
       <h2><%= title %></h2>
       <ul>
         <%_ versions.forEach(version => { _%>
-        <li><a href=<%= version.code %>><%= version.spelled %></a></li>
+        <li><a href=<%= identifier %>/<%= version.code %>><%= version.spelled %></a></li>
         <%_ }) _%>
       </ul>
       <%- html %>
