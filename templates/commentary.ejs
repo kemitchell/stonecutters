@@ -2,7 +2,7 @@
 <html lang=en-US>
   <head>
     <%- include('../includes/meta.html') -%>
-    <title><%= title %> <%= edition %> Commentary :: Stonecutters</title>
+    <title><%= title %> <%= version %> Commentary :: Stonecutters</title>
     <%- include('../includes/head.html') -%>
   </head>
   <body>
@@ -10,12 +10,12 @@
     <%- include('../includes/navigation.html') %>
     <main role=main>
       <h2><%= title %></h2>
-      <p class=edition><%= editionSpelled %></p>
+      <p class=version><%= versionSpelled %></p>
       <%- include('../includes/terms.html') -%>
       <h3>Comments</h3>
       <%- commentaryHTML -%>
       <%_ if (notes) { _%>
-        <h3>Notes to this Edition</h3>
+        <h3>Notes to this Version</h3>
         <%- notesHTML -%>
       <%_ } _%>
       <h3>Metadata</h3>

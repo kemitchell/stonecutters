@@ -9,8 +9,6 @@
     "glob": "^8.0.3",
     "gray-matter": "^4.0.3",
     "licensee": "^8.2.0",
-    "reviewers-edition-compare": "^1.0.5",
-    "reviewers-edition-spell": "^2.0.0",
     "rimraf": "^3.0.2",
     "run-parallel-limit": "^1.1.0",
     "run-series": "^1.1.9"
@@ -18,5 +16,8 @@
   "scripts": {
     "build": "./build",
     "licenses": "licensee --errors-only"
+  },
+  "dependencies": {
+    "legal-versioning-compare": "^1.0.0"
   }
 }

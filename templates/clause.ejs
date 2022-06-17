@@ -11,8 +11,8 @@
     <main role=main>
       <h2><%= title %></h2>
       <ul>
-        <%_ editions.forEach(edition => { _%>
-        <li><a href=<%= edition.code %>><%= edition.spelled %></a></li>
+        <%_ versions.forEach(version => { _%>
+        <li><a href=<%= version.code %>><%= version.spelled %></a></li>
         <%_ }) _%>
       </ul>
       <%- html %>

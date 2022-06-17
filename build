@@ -8,8 +8,7 @@ const glob = require('glob')
 const grayMatter = require('gray-matter')
 const hash = require('commonform-hash')
 const path = require('path')
-const revedCompare = require('reviewers-edition-compare')
-const revedSpell = require('reviewers-edition-spell')
+const versionCompare = require('legal-versioning-compare')
 const rimraf = require('rimraf')
 const runParallelLimit = require('run-parallel-limit')
 const runSeries = require('run-series')
@@ -52,7 +51,7 @@ function readClauses (done) {
       runSeries([
         readClauseMetadata,
         indexClause,
-        readEditions
+        readVersions
       ], done)
 
       function readClauseMetadata (done) {
@@ -68,7 +67,7 @@ function readClauses (done) {
               subjects: parts.data.subjects || [],
               description: parts.content,
               html: renderCommonMark(parts.content),
-              editions: {}
+              versions: {}
             }
             done()
           }
@@ -87,24 +86,24 @@ function readClauses (done) {
         done()
       }
 
-      function readEditions (done) {
-        glob(path.join(clauseDirectory, '*'), (error, editionDirectories) => {
+      function readVersions (done) {
+        glob(path.join(clauseDirectory, '*'), (error, versionDirectories) => {
           if (error) return done(error)
-          const editions = editionDirectories
+          const versions = versionDirectories
             .filter(directory => !directory.endsWith('clause.md'))
             .map(directory => path.basename(directory))
-            .sort((a, b) => revedCompare(b, a))
-          const latest = editions[0]
-          const onlyEdition = editions.length === 1
-          runSeries(editions.map(edition => done => {
+            .sort((a, b) => versionCompare(b, a))
+          const latest = versions[0]
+          const onlyVersion = versions.length === 1
+          runSeries(versions.map(version => done => {
             if (!clauses[identifier]) {
               clauses[identifier] = {
                 identifier,
-                editions: {}
+                versions: {}
               }
             }
-            const record = clauses[identifier].editions[edition] = {
-              spelled: revedSpell(edition)
+            const record = clauses[identifier].versions[version] = {
+              spelled: `Version ${version}`
             }
             runSeries([
               readTerms,
@@ -114,7 +113,7 @@ function readClauses (done) {
 
             function readTerms (done) {
               fs.readFile(
-                path.join(clauseDirectory, edition, 'terms.md'),
+                path.join(clauseDirectory, version, 'terms.md'),
                 'utf8',
                 (error, read) => {
                   if (error) return done(error)
@@ -129,11 +128,11 @@ function readClauses (done) {
                       }
                     })
                   record.identifier = identifier
-                  record.edition = edition
+                  record.version = version
                   record.latest = latest
-                  record.onlyEdition = onlyEdition
-                  record.permalink = `${BASE_HREF}/${identifier}/${edition}`
-                  record.editionSpelled = revedSpell(edition)
+                  record.onlyVersion = onlyVersion
+                  record.permalink = `${BASE_HREF}/${identifier}/${version}`
+                  record.versionSpelled = `Version ${version}`
                   record.frontMatter = parts.data || {}
                   record.markup = parts.content.trim()
                   record.parsed = commonformCommonmark.parse(record.markup)
@@ -158,7 +157,7 @@ function readClauses (done) {
 
             function readCommonMarkFile (basename, key, done) {
               fs.readFile(
-                path.join(clauseDirectory, edition, basename),
+                path.join(clauseDirectory, version, basename),
                 'utf8',
                 (error, read) => {
                   if (error) {
@@ -246,12 +245,12 @@ function copyStaticFiles (done) {
 function writeClausePages (done) {
   const identifiers = Object.keys(clauses)
   runSeries(identifiers.map(identifier => done => {
-    const editions = Object.keys(clauses[identifier].editions)
-      .sort((a, b) => revedCompare(b, a))
+    const versions = Object.keys(clauses[identifier].versions)
+      .sort((a, b) => versionCompare(b, a))
     runSeries([
       createDirectory,
       writeIndex,
-      writeEditions
+      writeVersions
     ], done)
 
     function createDirectory (done) {
@@ -266,10 +265,10 @@ function writeClausePages (done) {
           identifier,
           title: record.title,
           html: record.html,
-          editions: Object.keys(clauses[identifier].editions)
-            .sort((a, b) => revedCompare(b, a))
-            .map(edition => {
-              return { code: edition, spelled: revedSpell(edition) }
+          versions: Object.keys(clauses[identifier].versions)
+            .sort((a, b) => versionCompare(b, a))
+            .map(version => {
+              return { code: version, spelled: `Version ${version}` }
             })
         },
         path.join('site', identifier, 'index.html'),
@@ -277,20 +276,20 @@ function writeClausePages (done) {
       )
     }
 
-    function writeEditions (done) {
-      runParallelLimit(editions.map(edition => done => {
-        const record = clauses[identifier].editions[edition]
+    function writeVersions (done) {
+      runParallelLimit(versions.map(version => done => {
+        const record = clauses[identifier].versions[version]
 
         runSeries([
-          writeEdition,
+          writeVersion,
           writeCommentary
         ], done)
 
-        function writeEdition (done) {
+        function writeVersion (done) {
           writeTemplate(
-            'edition',
+            'version',
             record,
-            path.join('site', identifier, `${edition}.html`),
+            path.join('site', identifier, `${version}.html`),
             done
           )
         }
@@ -300,7 +299,7 @@ function writeClausePages (done) {
           writeTemplate(
             'commentary',
             record,
-            path.join('site', identifier, `${edition}-commentary.html`),
+            path.join('site', identifier, `${version}-commentary.html`),
             done
           )
         }
@@ -343,8 +342,8 @@ function writeSubjectPages (done) {
             return {
               identifier,
               title: clauses[identifier].title,
-              edition: Object.keys(clauses[identifier].editions)
-                .sort((a, b) => revedCompare(b, a))[0]
+              version: Object.keys(clauses[identifier].versions)
+                .sort((a, b) => versionCompare(b, a))[0]
             }
           })
       },
@@ -364,8 +363,8 @@ function writeHomePage (done) {
           return {
             identifier,
             title: clauses[identifier].title,
-            edition: Object.keys(clauses[identifier].editions)
-              .sort((a, b) => revedCompare(b, a))[0]
+            version: Object.keys(clauses[identifier].versions)
+              .sort((a, b) => versionCompare(b, a))[0]
           }
         }),
       subjects: Object.keys(subjects)
@@ -383,13 +382,13 @@ function writeBookFiles (done) {
   const identifiers = Object.keys(clauses)
   runParallelLimit(identifiers.map(identifier => done => {
     const clauseRecord = clauses[identifier]
-    const editions = Object.keys(clauseRecord.editions)
+    const versions = Object.keys(clauseRecord.versions)
     const chapterFile = path.join('book', `${identifier}.md`)
     bookSources.push(chapterFile)
-    editions
-      .sort((a, b) => revedCompare(b, a))
-      .forEach(edition => {
-        bookSources.push(sectionFile(identifier, edition))
+    versions
+      .sort((a, b) => versionCompare(b, a))
+      .forEach(version => {
+        bookSources.push(sectionFile(identifier, version))
       })
     writeTemplate(
       'chapter',
@@ -397,12 +396,12 @@ function writeBookFiles (done) {
       chapterFile,
       error => {
         if (error) return done(error)
-        runSeries(editions.map(edition => done => {
-          const record = clauses[identifier].editions[edition]
+        runSeries(versions.map(version => done => {
+          const record = clauses[identifier].versions[version]
           writeTemplate(
             'entry',
             record,
-            sectionFile(identifier, edition),
+            sectionFile(identifier, version),
             done
           )
         }), done)
@@ -411,8 +410,8 @@ function writeBookFiles (done) {
   }), 3, done)
 }
 
-function sectionFile (identifier, edition) {
-  return path.join('book', `${identifier} ${edition}.md`)
+function sectionFile (identifier, version) {
+  return path.join('book', `${identifier} ${version}.md`)
 }
 
 function compileBook (done) {

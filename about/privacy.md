@@ -2,9 +2,9 @@
 title: Privacy
 ---
 
-This policy was last updated on October 29, 2020.
+This policy was last updated on June 17, 2022.
 
-This website follows the Doormat Privacy Policy at <https://doormatprivacy.com/1e>.
+This website follows the Doormat Privacy Policy at <https://doormatprivacy.com/1.0.0>.
 
 For questions or comments about privacy, you can contact us at <feedback@stonecutters.law>.
 

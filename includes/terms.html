@@ -1,12 +1,12 @@
-<%_ if (edition === latest) { _%>
+<%_ if (version === latest) { _%>
 <aside class=info>
-  This is the latest edition of this clause.
-  <%_ if (!onlyEdition) { _%>
-    <a href=/<%= identifier %>>Previous editions</a> remain available.
+  This is the latest version of this clause.
+  <%_ if (!onlyVersion) { _%>
+    <a href=/<%= identifier %>>Previous versions</a> remain available.
   <%_ } _%>
 </aside>
 <%_ } else { _%>
-<aside class=warning>A <a href=/<%= identifier %>/<%= latest %>>newer edition</a> of this clause is available.</aside>
+<aside class=warning>A <a href=/<%= identifier %>/<%= latest %>>newer version</a> of this clause is available.</aside>
 <%_ } _%>
 <blockquote id=terms class=terms><%- termsHTML %></blockquote>
 <aside class=info>Documents incorporating this clause by reference incorporate only the above-quoted terms.</aside>
