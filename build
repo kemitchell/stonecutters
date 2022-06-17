@@ -28,6 +28,7 @@ runSeries([
   recreateSiteDirectory,
   copyStaticFiles,
   writeClausePages,
+  writeClauseJSON,
   writeAboutPages,
   writeSubjectPages,
   writeHomePage,
@@ -303,6 +304,42 @@ function writeClausePages (done) {
             done
           )
         }
+      }), 3, done)
+    }
+  }), done)
+}
+
+function writeClauseJSON (done) {
+  const identifiers = Object.keys(clauses)
+  runSeries(identifiers.map(identifier => done => {
+    const versions = Object.keys(clauses[identifier].versions)
+      .sort((a, b) => versionCompare(b, a))
+    runSeries([
+      writeIndex,
+      writeVersions
+    ], done)
+
+    function writeIndex (done) {
+      fs.writeFile(
+        path.join('site', `${identifier}.json`),
+        JSON.stringify({ versions }),
+        done
+      )
+    }
+
+    function writeVersions (done) {
+      runParallelLimit(versions.map(version => done => {
+        const record = clauses[identifier].versions[version]
+        fs.writeFile(
+          path.join('site', identifier, `${version}.json`),
+          JSON.stringify({
+            publisher: 'Stonecutters',
+            name: record.title,
+            version,
+            form: record.parsed.form
+          }),
+          done
+        )
       }), 3, done)
     }
   }), done)
