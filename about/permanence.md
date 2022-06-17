@@ -6,7 +6,7 @@ As a general rule, once a version of a clause gets published on stonecutters.law
 
 The purpose of this policy is to allow others to link to, cite, and incorporate every version of every clause on stonecutters.law by reference.  If terms could change willy-nilly, without warning, no competent counselor would do that.
 
-As an example, the [first draft of the first version of california-governing-law](https://stonecutters.law/california-governing-law/1.0.0-1), our California governing law clause, will always be available at <https://stonecutters.law/california-governing-law/1.0.0-1>. Its substantive content will not change.
+As an example, the [first draft of the first version of california-governing-law](https://stonecutters.law/california-governing-law/1.0.0), our California governing law clause, will always be available at <https://stonecutters.law/california-governing-law/1.0.0>. Its substantive content will not change.
 
 When we find a way to improve on the clause, or spots an error in it, we will publish new versions of the california-governing-law clause.  The first draft of the first version will not change. If and when we become embarrassed by that first draft in the future, tough luck.  We will publish something new and better, not vainly purge our prior handiwork from history.
 
