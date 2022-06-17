@@ -1,7 +1,7 @@
 ---
 jurisdictions: [California]
 license: CC0-1.0
-published: 2022-06-17
+published: "2022-06-17"
 ---
 
 - **Agreed Courts** means any court of the State of California sitting in _Venue City_ and the United States District Court for the district encompassing it.
