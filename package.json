@@ -6,7 +6,7 @@
     "commonform-hash": "^1.0.1",
     "commonmark": "^0.30.0",
     "ejs": "^3.1.6",
-    "glob": "^7.2.0",
+    "glob": "^8.0.3",
     "gray-matter": "^4.0.3",
     "licensee": "^8.2.0",
     "reviewers-edition-compare": "^1.0.5",
