@@ -281,29 +281,12 @@ function writeClausePages (done) {
       runParallelLimit(versions.map(version => done => {
         const record = clauses[identifier].versions[version]
 
-        runSeries([
-          writeVersion,
-          writeCommentary
-        ], done)
-
-        function writeVersion (done) {
-          writeTemplate(
-            'version',
-            record,
-            path.join('site', identifier, `${version}.html`),
-            done
-          )
-        }
-
-        function writeCommentary (done) {
-          if (!record.commentary) return done()
-          writeTemplate(
-            'commentary',
-            record,
-            path.join('site', identifier, `${version}-commentary.html`),
-            done
-          )
-        }
+        writeTemplate(
+          'version',
+          record,
+          path.join('site', identifier, `${version}.html`),
+          done
+        )
       }), 3, done)
     }
   }), done)

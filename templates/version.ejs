@@ -12,6 +12,10 @@
       <h2><%= title %></h2>
       <p class=version><%= versionSpelled %></p>
       <%- include('../includes/terms.html') -%>
+      <%_ if (commentary) { _%>
+      <h3>Commentary</h3>
+      <%- commentaryHTML -%>
+      <%_ } _%>
       <h3>Metadata</h3>
       <%- include('../includes/metadata.html') -%>
     </main>
